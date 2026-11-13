@@ -16,5 +16,5 @@ Run `tools/Get GCSE papers.bat` on Windows. It downloads every past paper, mark 
 ## Quiz & Learn buttons
 These are written live by Claude and only work when the page is opened inside Claude (claude.ai). On a normal host they show a message instead.
 
-## Your progress
-Ticks, scores, plan and PDF annotations are saved in your browser (localStorage / IndexedDB). They stay per browser and per website address, so progress from the Claude-hosted copy will not carry over to the GitHub copy.
+## Syncing between devices
+Click **☁️ Sync** in the sidebar. On the GitHub-hosted site, paste a GitHub token that has only the `gist` scope; your ticks, quiz scores, paper scores and PDF annotations are stored in a private Gist (`kenz-revision-sync`) and sync on every device you connect with the same token. The copy opened inside Claude syncs automatically through your Claude account. The two copies keep separate progress.

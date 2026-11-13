@@ -1327,7 +1327,7 @@ const MGMAP={"N1 Ordering integers, decimals & fractions":["1.5"],"N2 Place valu
 <script>
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}if(window.SYNC)SYNC.touch(k)}};
 let DONE=new Set(store.get('kz_done',[]));
 const saveDone=()=>store.set('kz_done',[...DONE]);
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2400)}
@@ -1380,6 +1380,7 @@ function side(){const h=location.hash.slice(1)||'home';
   <a class="nav ${h==='plan'?'on':''}" href="#plan">🗓&nbsp; My plan</a>
   <a class="nav ${h==='exams'?'on':''}" href="#exams">📝&nbsp; Exams & papers</a>
   <a class="nav ${h==='library'?'on':''}" href="#library">✏️&nbsp; PDF editor</a>
+  <a class="nav" href="#" id="syncBtn">☁️&nbsp; Sync <span class="pc" id="syncSt">${window.SYNC?SYNC.badge():''}</span></a>
   <div class="navh">Courses</div>
   ${COURSES.map(c=>`<a class="nav ${h===c.id?'on':''}" style="--c:${c.color}" href="#${c.id}"><span class="dot"></span>${esc(c.name)}<span class="pc">${pct(byC(c.id))}%</span></a>`).join('')}`}
 
@@ -1529,6 +1530,64 @@ function quiz(id){const Q=QUIZZES[id];let order=Q.items.map((_,i)=>i).sort(()=>M
     m.querySelector('#fl').animate([{transform:'rotateX(12deg)',opacity:.4},{transform:'none',opacity:1}],{duration:300,easing:'ease-out'})};
   m.querySelector('#fl').onclick=()=>{shown=!shown;draw()};
   m.querySelector('#qyes').onclick=()=>{score++;i++;shown=false;draw()};m.querySelector('#qno').onclick=()=>{i++;shown=false;draw()};draw()}
+
+// ---------- cross-device sync ----------
+// Claude copy: per-person rows in the artifact's private db. Hosted copy (e.g. GitHub Pages): a private GitHub Gist.
+window.SYNC=(()=>{const KEYS=['kz_done','kz_open','kz_pp','kz_pps','kz_qs','kz_exc','kz_marked'];
+ const TS=()=>{try{return JSON.parse(localStorage.getItem('kz_ts')||'{}')}catch(e){return{}}};const setTS=o=>{try{localStorage.setItem('kz_ts',JSON.stringify(o))}catch(e){}};
+ const raw=k=>localStorage.getItem(k);
+ let mode=null,state='off',last=0,timer=null,db=null,uid=null,applying=false;
+ const lsGet=k=>{try{return localStorage.getItem(k)}catch(e){return null}},lsSet=(k,v)=>{try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}};
+ const set=(st)=>{state=st;const b=$('#syncSt');if(b)b.textContent=badge()};
+ const badge=()=>({off:'off',idle:'✓',busy:'…',err:'!' })[state]||'';
+ function snapshot(){const t=TS(),o={};KEYS.forEach(k=>{const v=raw(k);if(v!=null)o[k]={v,t:t[k]||1}});return o}
+ function apply(remote){if(!remote)return false;const t=TS();let changed=false;
+  for(const k of KEYS){const r=remote[k];if(!r||typeof r.v!=='string')continue;if((r.t||0)>(t[k]||0)){
+   let v=r.v;const mine=raw(k);
+   if(!t[k]&&mine&&(k==='kz_done'||k==='kz_pp')){try{v=JSON.stringify([...new Set([...JSON.parse(r.v),...JSON.parse(mine)])]);t[k]=Date.now();lsSet(k,v);changed=true;continue}catch(e){}}
+   lsSet(k,v);t[k]=r.t;changed=true}}
+  if(changed){setTS(t);applying=true;try{DONE=new Set(store.get('kz_done',[]));openUnits=store.get('kz_open',{});exC=store.get('kz_exc','maths');QS=store.get('kz_qs',{});route()}finally{applying=false}}
+  return changed}
+ function touch(k){if(applying||!KEYS.includes(k))return;const t=TS();t[k]=Date.now();setTS(t);if(mode){clearTimeout(timer);timer=setTimeout(push,1500)}}
+ // ---- GitHub Gist backend ----
+ const GH='https://api.github.com';const tok=()=>lsGet('kz_gh');
+ async function gh(path,opt={}){const r=await fetch(GH+path,{...opt,headers:{'Authorization':'Bearer '+tok(),'Accept':'application/vnd.github+json',...(opt.body?{'Content-Type':'application/json'}:{})}});if(!r.ok)throw new Error('GitHub '+r.status);return r.json()}
+ async function gistId(){let id=lsGet('kz_gist');if(id)return id;
+  const list=await gh('/gists?per_page=100');const g=list.find(x=>x.description==='kenz-revision-sync');
+  if(g)id=g.id;else id=(await gh('/gists',{method:'POST',body:JSON.stringify({description:'kenz-revision-sync',public:false,files:{'state.json':{content:'{}'}}})})).id;
+  lsSet('kz_gist',id);return id}
+ async function ghPull(){const g=await gh('/gists/'+await gistId());const f=g.files&&g.files['state.json'];if(!f)return{};
+  let c=f.content;if(f.truncated&&f.raw_url)c=await (await fetch(f.raw_url)).text();try{return JSON.parse(c||'{}')}catch(e){return{}}}
+ async function ghPush(o){await gh('/gists/'+await gistId(),{method:'PATCH',body:JSON.stringify({files:{'state.json':{content:JSON.stringify(o)}}})})}
+ // ---- Claude db backend ----
+ async function dbPull(){const o={};await Promise.all(KEYS.map(async k=>{try{const d=await db.collection('data/users/'+uid).doc(k).get();const v=d&&(d.data?d.data():d);if(v&&typeof v.v==='string')o[k]=v}catch(e){}}));return o}
+ async function dbPush(o){const t=TS();for(const k of KEYS){if(!o[k])continue;if((t[k]||0)<=(dbSent[k]||0))continue;await db.collection('data/users/'+uid).doc(k).set(o[k]);dbSent[k]=t[k]}}
+ const dbSent={};
+ // merge: pull newer remote values, then push anything newer locally
+ async function sync(){if(!mode)return;set('busy');try{
+   const remote=mode==='gist'?await ghPull():await dbPull();apply(remote);
+   const mine=snapshot();let need=false;for(const k in mine)if(!remote[k]||(mine[k].t||0)>(remote[k].t||0))need=true;
+   if(need){mode==='gist'?await ghPush({...remote,...Object.fromEntries(Object.entries(mine).filter(([k,v])=>!remote[k]||v.t>(remote[k].t||0)))}):await dbPush(mine)}
+   last=Date.now();set('idle')}catch(e){console.warn('sync',e);set('err')}}
+ async function push(){if(!mode)return;set('busy');try{if(mode==='gist'){const remote=await ghPull();apply(remote);const mine=snapshot();const out={...remote};for(const k in mine)if(!remote[k]||mine[k].t>(remote[k].t||0))out[k]=mine[k];await ghPush(out)}else await dbPush(snapshot());last=Date.now();set('idle')}catch(e){console.warn('sync',e);set('err')}}
+ async function start(){
+  // inside Claude: use the private per-person db automatically
+  try{if(window.claude&&claude.use){const [d,u]=await Promise.all([claude.use('db'),claude.use('user')]);if(d&&u){const id=typeof u.id==='function'?await u.id():u.id;if(id){db=d;uid=id;mode='db';await sync();setInterval(sync,60000);addEventListener('focus',sync);return}}}}catch(e){}
+  if(tok()){mode='gist';await sync();setInterval(sync,60000);addEventListener('focus',sync);return}
+  set('off')}
+ function panel(){const m=modal(`<div class="mbox qbox"><h2>☁️ Sync across devices</h2>
+  ${mode==='db'?`<p class="sub" style="margin:8px 0">You're using the Claude copy, so your progress syncs automatically to your Claude account on every device. ${last?'Last synced '+new Date(last).toLocaleTimeString()+'.':''}</p>`:
+  mode==='gist'?`<p class="sub" style="margin:8px 0">Syncing through a private GitHub Gist. ${last?'Last synced '+new Date(last).toLocaleTimeString()+'.':''} ${state==='err'?'<b style="color:#ff7a59">Last sync failed — check the token.</b>':''}</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn pri" id="sNow">Sync now</button><button class="btn" id="sOff">Disconnect this device</button></div>`:
+  `<p class="sub" style="margin:8px 0 14px">Your ticks, quiz scores, paper scores, plan and PDF annotations will sync between every device you connect. Data is stored in a <b>private GitHub Gist</b> on your account.</p>
+   <ol style="line-height:1.7;margin:0 0 14px 18px;padding:0"><li><a href="https://github.com/settings/tokens/new?scopes=gist&description=kenz-revision%20sync" target="_blank" rel="noopener" style="color:var(--acc)">Create a GitHub token</a> with only the <b>gist</b> box ticked (set expiry to after your exams).</li><li>Paste it below. Do the same on each device (phone, laptop) with the same token.</li></ol>
+   <input id="sTok" placeholder="ghp_… or github_pat_…" style="width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:10px;color:var(--ink);padding:10px 12px;font:inherit"><div style="margin-top:12px"><button class="btn pri" id="sGo">Connect</button></div>`}
+  <p class="note" style="margin-top:14px">Imported past papers aren't synced (they're big) — import the papers folder on each device; your annotations on them do sync.</p></div>`);
+  const go=m.querySelector('#sGo');if(go)go.onclick=async()=>{const v=m.querySelector('#sTok').value.trim();if(!v)return;lsSet('kz_gh',v);lsSet('kz_gist',null);go.textContent='Connecting…';try{await gh('/user');mode='gist';await sync();if(state==='err')throw 0;m.remove();toast('☁️ Synced — do the same on your other devices');confetti(innerWidth/2,innerHeight/3,'#22c4ee',80);setInterval(sync,60000)}catch(e){lsSet('kz_gh',null);go.textContent='Connect';toast('That token didn’t work — make sure the gist box is ticked')}};
+  const now=m.querySelector('#sNow');if(now)now.onclick=async()=>{await sync();m.remove();toast(state==='err'?'Sync failed':'☁️ Synced')};
+  const off=m.querySelector('#sOff');if(off)off.onclick=()=>{lsSet('kz_gh',null);lsSet('kz_gist',null);mode=null;set('off');m.remove();toast('This device is no longer syncing')}}
+ return {touch,start,panel,badge,sync}})();
+setTimeout(()=>SYNC.start(),0);
+document.addEventListener('click',e=>{if(e.target.closest('#syncBtn')){e.preventDefault();SYNC.panel()}});
 
 // ---------- AI topic quizzes & notes (Claude, via the page's sample capability) ----------
 let QS=store.get('kz_qs',{});let SAMPLE=null;
