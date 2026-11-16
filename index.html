@@ -1333,9 +1333,8 @@ const saveDone=()=>store.set('kz_done',[...DONE]);
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2400)}
 const spUrl=(p,file)=>file?SP_ROOT+(SP_BASE+p).split('/').map(encodeURIComponent).join('/')+(/\.(docx?|pptx?)$/i.test(p)?'?web=1':''):SP_ROOT+'/KS4%20Student%20Learning%20Materials/Forms/AllItems.aspx?id='+encodeURIComponent((SP_BASE+p).replace(/\/$/,''));
 const yt=(c,q)=>'https://www.youtube.com/results?search_query='+encodeURIComponent((c?c+' ':'')+q);
-const ytCh=(h,q)=>'https://www.youtube.com/'+h+'/search?query='+encodeURIComponent(q);
-// video sources per course: first = main Watch button (channel-scoped where the channel covers the exact spec)
-const VIDS={maths:[['Maths Genie',(t)=>ytCh('@mathsgenie7808',mgOf(t)[0]?MG[mgOf(t)[0]][0]:t.q)],['Corbettmaths',t=>yt('Corbettmaths',t.q)]],
+// video sources per course: first = main Watch button
+const VIDS={maths:[['Cognito',t=>yt('Cognito GCSE Maths',t.q)]],
  science:[['Cognito',t=>yt('Cognito',t.q)],['Freesciencelessons',t=>yt('Freesciencelessons',t.q)]],
  english:[['Mr Bruff',t=>yt('Mr Bruff',t.q)],['Mr Salles',t=>yt('Mr Salles',t.q)]],
  cs:[["Craig'n'Dave",t=>yt("Craig n Dave",t.q)],['CS Tutor',t=>yt('Computer Science Tutor',t.q)]],
