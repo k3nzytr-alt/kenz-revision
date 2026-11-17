@@ -1357,6 +1357,24 @@ COURSES.forEach(c=>c.units.forEach((u,ui)=>u.topics.forEach((t,ti)=>{
 const byC=id=>T.filter(t=>t.c.id===id);
 const pct=list=>list.length?Math.round(list.filter(t=>DONE.has(t.id)).length/list.length*100):0;
 
+// Plumi question-bank routine: two core sessions every week, plus one rotating subject.
+const PLUMI_BANKS={
+ maths:{course:'maths',name:'AQA Higher Maths',task:'Complete 10 Higher Maths questions',url:'https://tryplumi.app/question-bank/aqa-gcse-maths'},
+ science:{course:'science',name:'Edexcel Combined Science',task:'Complete 10 Combined Science questions',url:'https://tryplumi.app/question-bank/edexcel-gcse-combined-science'},
+ englishLang:{course:'english',name:'Edexcel English Language',task:'Complete one English Language question set',url:'https://tryplumi.app/question-bank/edexcel-gcse-english-language'},
+ englishLit:{course:'english',name:'Edexcel English Literature',task:'Complete one English Literature question set',url:'https://tryplumi.app/question-bank/edexcel-gcse-english-literature'},
+ cs:{course:'cs',name:'OCR Computer Science',task:'Complete 10 Computer Science questions',url:'https://tryplumi.app/question-bank/ocr-gcse-computer-science'},
+ business:{course:'business',name:'Edexcel Business',task:'Complete 10 Business questions',url:'https://tryplumi.app/question-bank/edexcel-gcse-business'}
+};
+const PLUMI_BY_COURSE={maths:[PLUMI_BANKS.maths],science:[PLUMI_BANKS.science],english:[PLUMI_BANKS.englishLang,PLUMI_BANKS.englishLit],cs:[PLUMI_BANKS.cs],business:[PLUMI_BANKS.business]};
+const PLUMI_ROTATION=[PLUMI_BANKS.englishLang,PLUMI_BANKS.cs,PLUMI_BANKS.business,PLUMI_BANKS.englishLit];
+let PRACTICE_DONE=new Set(store.get('kz_plumi_done',[]));
+function practiceFor(w,i){const fri=PLUMI_ROTATION[i%PLUMI_ROTATION.length];return[
+ {...PLUMI_BANKS.maths,id:`plumi:${w.k}:maths`,day:'MON'},
+ {...PLUMI_BANKS.science,id:`plumi:${w.k}:science`,day:'WED'},
+ {...fri,id:`plumi:${w.k}:${fri.course}:${i%PLUMI_ROTATION.length}`,day:'FRI'}
+]}
+
 // ---------- plan ----------
 const EXAM=new Date('2027-05-11T09:00:00');
 function mondays(){const out=[];let d=new Date('2026-11-16');while(d<=new Date('2027-05-03')){out.push(new Date(d));d.setDate(d.getDate()+7)}return out}
@@ -1367,6 +1385,7 @@ const WEEKS=mondays().map(d=>{const k=d.toISOString().slice(0,10);
   else if(k==='2027-03-29'||k==='2027-04-05'){kind='papers';label='Easter: full timed papers'}
   else if(k==='2027-04-26'||k==='2027-05-03'){kind='papers';label='Final countdown: papers + quotes'}
   return {d,k,kind,label,tasks:[]}});
+WEEKS.forEach((w,i)=>w.practice=practiceFor(w,i));
 (function assign(){const learn=WEEKS.filter(w=>w.kind==='learn');
   COURSES.forEach(c=>{const ts=byC(c.id);ts.forEach((t,i)=>{const w=learn[Math.min(learn.length-1,Math.floor(i*learn.length/ts.length))];w.tasks.push(t)})})})();
 const curWeek=()=>{const now=new Date();let i=WEEKS.findIndex((w,j)=>now<(WEEKS[j+1]?.d||new Date('2027-05-10')));return Math.max(0,i)};
@@ -1393,12 +1412,14 @@ function home(){const all=pct(T);const now=new Date();const days=Math.max(0,Math
   <div class="sec"><h2>Your courses</h2></div>
   <div class="grid g3 stag">${COURSES.map(c=>{const ts=byC(c.id),d=ts.filter(t=>DONE.has(t.id)).length;return `<a class="card scard" style="--c:${c.color}" href="#${c.id}"><div class="ic">${c.icon}</div><h3>${esc(c.name)}</h3><div class="spec">${esc(c.spec)}</div><div class="meta"><span><b>${d}</b> / ${ts.length} topics</span><b>${pct(ts)}%</b></div><div class="bar"><i data-w="${pct(ts)}"></i></div></a>`}).join('')}</div>
   <div class="sec"><h2>This week · ${fmt(w.d)}</h2><a class="btn sm" href="#plan">Full plan →</a></div>
-  <div class="grid">${w.tasks.length?w.tasks.map(t=>nextRow(t)).join(''):`<div class="card"><b>${esc(w.label)}</b><p class="note">Do one timed past paper per subject. Open them from <a href="#exams" style="color:var(--acc)">Exams</a> and mark them up in the editor.</p></div>`}</div>
+  <div class="grid">${w.practice.map(practiceCard).join('')}${w.tasks.length?w.tasks.map(t=>nextRow(t)).join(''):`<div class="card"><b>${esc(w.label)}</b><p class="note">Do one timed past paper per subject. Open them from <a href="#exams" style="color:var(--acc)">Exams</a> and mark them up in the editor.</p></div>`}</div>
   <div class="sec"><h2>Up next in each course</h2></div>
   <div class="grid">${COURSES.map(c=>{const t=byC(c.id).find(t=>!DONE.has(t.id));return t?nextRow(t):''}).join('')}</div></div>`;
   requestAnimationFrame(()=>{setTimeout(()=>{const r=$('#ringfg');if(r)r.style.strokeDashoffset=C*(1-all/100);animBars()},60)});
 }
 function nextRow(t){return `<a class="next" style="--c:${t.c.color}" href="#${t.c.id}" data-jump="${t.id}"><span class="chk${DONE.has(t.id)?'':''}" style="pointer-events:none;${DONE.has(t.id)?'background:var(--c);border-color:var(--c)':''}"></span><div><div class="tg">${esc(t.c.name)} · ${esc(t.u.name)}</div><div class="tt">${esc(t.title)}</div></div><span class="go">→</span></a>`}
+function practiceCard(p){const d=PRACTICE_DONE.has(p.id),c=COURSES.find(x=>x.id===p.course);return `<div class="next${d?' done':''}" style="--c:${c.color}"><button class="chk" data-practice="${esc(p.id)}" aria-label="Mark question practice done" style="${d?'background:var(--c);border-color:var(--c)':''}"><svg viewBox="0 0 24 24" style="${d?'stroke-dashoffset:0':''}"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><div style="flex:1"><div class="tg">${p.day} · PLUMI · ${esc(p.name)}</div><div class="tt" style="${d?'text-decoration:line-through;color:var(--muted)':''}">${esc(p.task)}</div></div><a class="btn sm" href="${esc(p.url)}" target="_blank" rel="noopener">Questions ↗</a></div>`}
+function practicePlanRow(p){const d=PRACTICE_DONE.has(p.id),c=COURSES.find(x=>x.id===p.course);return `<div class="wt${d?' done':''}" style="--c:${c.color}"><button class="chk" data-practice="${esc(p.id)}" aria-label="Mark question practice done" style="${d?'background:var(--c);border-color:var(--c)':''}"><svg viewBox="0 0 24 24" style="${d?'stroke-dashoffset:0':''}"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><span class="sj">${p.day} · PLUMI</span><span class="tt">${esc(p.task)}</span><a class="btn sm" href="${esc(p.url)}" target="_blank" rel="noopener">Open bank ↗</a></div>`}
 function animBars(){$$('.bar i[data-w]').forEach(b=>b.style.width=b.dataset.w+'%')}
 
 // ---------- course ----------
@@ -1413,7 +1434,7 @@ function course(id){const c=COURSES.find(x=>x.id===id);const ts=byC(id);const v=
      <div class="ub"><div>${ut.map(t=>topicRow(t)).join('')}</div></div></div>`}).join('')}</div>
   <div class="side"><div class="card"><h4>Exam papers</h4>${c.papers.map(p=>`<div class="paper">${esc(p)}</div>`).join('')}</div>
    <div class="card"><h4>School resources</h4>${c.resources.map(res).join('')||'<p class="note">None in the folder.</p>'}</div>
-   <div class="card"><h4>Past papers & practice</h4><a class="rl" href="#exams" onclick="store.set('kz_exc','${c.id}');exC='${c.id}'"><span class="k k-pdf">PAPERS</span>${(PAPERS[c.id]||[]).length} past-paper sittings + mark schemes →</a>${c.boards.map(([t,u])=>`<a class="rl" href="${esc(u)}" target="_blank" rel="noopener"><span class="k k-web">WEB</span>${esc(t)}</a>`).join('')}
+   <div class="card"><h4>Past papers & practice</h4><a class="rl" href="#exams" onclick="store.set('kz_exc','${c.id}');exC='${c.id}'"><span class="k k-pdf">PAPERS</span>${(PAPERS[c.id]||[]).length} past-paper sittings + mark schemes →</a>${(PLUMI_BY_COURSE[c.id]||[]).map(p=>`<a class="rl" href="${esc(p.url)}" target="_blank" rel="noopener"><span class="k k-web">PLUMI</span>${esc(p.name)} question bank</a>`).join('')}${c.boards.map(([t,u])=>`<a class="rl" href="${esc(u)}" target="_blank" rel="noopener"><span class="k k-web">WEB</span>${esc(t)}</a>`).join('')}
    <p class="note" style="margin-top:10px">Download a paper, then press <b>Open PDF</b> in the <a href="#library" style="color:var(--acc)">editor</a> to answer on it.</p></div></div></div></div>`;
   setTimeout(animBars,60);
   const j=sessionStorage.getItem('jump');if(j){sessionStorage.removeItem('jump');const el=v.querySelector(`[data-t="${j}"]`);if(el){el.closest('.unit').classList.add('open');setTimeout(()=>{el.scrollIntoView({behavior:'smooth',block:'center'});el.animate([{background:'#7c8cff30'},{background:'transparent'}],{duration:1600})},250)}}
@@ -1426,12 +1447,12 @@ function topicRow(t){const files=t.files.map(f=>/\.png$/.test(f)?`<button class=
 
 // ---------- plan view ----------
 function plan(){const wi=curWeek();
-  $('#v-plan').innerHTML=`<h1>My revision plan</h1><p class="sub">${WEEKS.length} weeks from 16 Nov to the exams. Every topic across your six courses is spread out, with holidays saved for past papers. Ticking a topic here also ticks it in the course.</p>
-  <div style="margin-top:22px" class="stag">${WEEKS.map((w,i)=>{const d=w.tasks.filter(t=>DONE.has(t.id)).length;const p=w.tasks.length?Math.round(d/w.tasks.length*100):0;
-   return `<div class="week${i===wi?' now open':''}" data-w="${i}"><div class="wh"><span class="wn">WEEK ${i+1}</span><h3>${fmt(w.d)} ${w.label?'· '+esc(w.label):`· ${w.tasks.length} topics`}</h3>${i===wi?'<span class="tag">THIS WEEK</span>':i<wi?'<span class="tag">past</span>':''}${w.tasks.length?`<div class="bar mini"><i data-w="${p}"></i></div>`:''}</div>
-   <div class="wb">${w.tasks.length?w.tasks.map(t=>`<div class="wt${DONE.has(t.id)?' done':''}" style="--c:${t.c.color}"><button class="chk" data-done="${t.id}" style="${DONE.has(t.id)?'background:var(--c);border-color:var(--c)':''}"><svg viewBox="0 0 24 24" style="${DONE.has(t.id)?'stroke-dashoffset:0':''}"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><span class="sj">${esc(t.c.name)}</span><span class="tt">${esc(t.title)}</span><a class="btn sm yt" href="${esc(vid(t))}" target="_blank" rel="noopener">▶</a><a class="btn sm" href="#${t.c.id}" data-jump="${t.id}">Open</a></div>`).join(''):
+  $('#v-plan').innerHTML=`<h1>My revision plan</h1><p class="sub">${WEEKS.length} weeks from 16 Nov to the exams. Every topic across your six courses is spread out, with recurring Plumi question-bank sessions on Monday, Wednesday and Friday.</p>
+  <div style="margin-top:22px" class="stag">${WEEKS.map((w,i)=>{const td=w.tasks.filter(t=>DONE.has(t.id)).length,pd=w.practice.filter(p=>PRACTICE_DONE.has(p.id)).length,total=w.tasks.length+w.practice.length,p=total?Math.round((td+pd)/total*100):0;
+   return `<div class="week${i===wi?' now open':''}" data-w="${i}"><div class="wh"><span class="wn">WEEK ${i+1}</span><h3>${fmt(w.d)} ${w.label?'· '+esc(w.label):`· ${w.tasks.length} topics`} · 3 question sessions</h3>${i===wi?'<span class="tag">THIS WEEK</span>':i<wi?'<span class="tag">past</span>':''}<div class="bar mini"><i data-w="${p}"></i></div></div>
+   <div class="wb"><div class="qexp" style="margin:0 0 8px"><b>Frequent question practice:</b> do the set, check the mark scheme, and write down one mistake to redo on Sunday.</div>${w.practice.map(practicePlanRow).join('')}${w.tasks.length?w.tasks.map(t=>`<div class="wt${DONE.has(t.id)?' done':''}" style="--c:${t.c.color}"><button class="chk" data-done="${t.id}" style="${DONE.has(t.id)?'background:var(--c);border-color:var(--c)':''}"><svg viewBox="0 0 24 24" style="${DONE.has(t.id)?'stroke-dashoffset:0':''}"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><span class="sj">${esc(t.c.name)}</span><span class="tt">${esc(t.title)}</span><a class="btn sm yt" href="${esc(vid(t))}" target="_blank" rel="noopener">▶</a><a class="btn sm" href="#${t.c.id}" data-jump="${t.id}">Open</a></div>`).join(''):
    `<p class="note">${w.kind==='papers'?'Each day: one full timed paper in one subject, then mark it with the mark scheme and redo every question you dropped marks on. Do the English quote quizzes daily.':'Catch up on anything unticked, then do one past paper per subject from <a href="#exams" style="color:var(--acc)">Exams</a>.'}</p>`}
-   <p class="note" style="margin-top:8px">Suggested: about 3 topics a day. For each one, watch the video (10 min), make quick notes or flashcards, then do 2–3 exam questions. Sunday is catch-up.</p></div></div>`}).join('')}</div>`;
+   <p class="note" style="margin-top:8px">Suggested: about 3 topics a day. For each one, watch the video (10 min), make quick notes or flashcards, then do 2–3 exam questions. Sunday is catch-up and mistake-redo day.</p></div></div>`}).join('')}</div>`;
   setTimeout(()=>{animBars();$('.week.now')?.scrollIntoView({behavior:'smooth',block:'center'})},80)}
 
 // ---------- exams ----------
@@ -1487,6 +1508,7 @@ addEventListener('hashchange',route);
 // ---------- global clicks ----------
 document.addEventListener('click',e=>{
   const dn=e.target.closest('[data-done]');if(dn){e.preventDefault();toggle(dn.dataset.done,dn);return}
+  const pr=e.target.closest('[data-practice]');if(pr){e.preventDefault();togglePractice(pr.dataset.practice,pr);return}
   const pp=e.target.closest('[data-pp]');if(pp){const S=new Set(store.get('kz_pp',[]));const k=pp.dataset.pp;const was=S.has(k);was?S.delete(k):S.add(k);store.set('kz_pp',[...S]);if(!was){const r=pp.getBoundingClientRect();confetti(r.left+10,r.top+10,'#3ddc97',30)}exams();return}
   const tq=e.target.closest('[data-tq]');if(tq){e.preventDefault();e.stopPropagation();topicQuiz([T.find(x=>x.id===tq.dataset.tq)]);return}
   const uq=e.target.closest('[data-uq]');if(uq){e.preventDefault();e.stopPropagation();const k=uq.dataset.uq;topicQuiz(T.filter(x=>x.c.id+'-'+x.c.units.indexOf(x.u)===k));return}
@@ -1499,6 +1521,7 @@ document.addEventListener('click',e=>{
   const uh=e.target.closest('.uh');if(uh){const u=uh.parentElement;u.classList.toggle('open');openUnits[u.dataset.u]=u.classList.contains('open');store.set('kz_open',openUnits);return}
   const wh=e.target.closest('.wh');if(wh){wh.parentElement.classList.toggle('open')}
 });
+function togglePractice(id,btn){const was=PRACTICE_DONE.has(id);was?PRACTICE_DONE.delete(id):PRACTICE_DONE.add(id);store.set('kz_plumi_done',[...PRACTICE_DONE]);if(!was){const r=btn.getBoundingClientRect();confetti(r.left+r.width/2,r.top+r.height/2,'#7c8cff',28);toast('✅ Question practice done')}route()}
 function toggle(id,btn){const was=DONE.has(id);was?DONE.delete(id):DONE.add(id);saveDone();
   const t=T.find(x=>x.id===id);
   $$(`[data-done="${id}"]`).forEach(b=>{const row=b.closest('.topic,.wt');if(row)row.classList.toggle('done',!was);b.style.background=!was?'var(--c)':'';b.style.borderColor=!was?'var(--c)':'';const s=b.querySelector('svg');if(s)s.style.strokeDashoffset=!was?'0':''});
@@ -1532,7 +1555,7 @@ function quiz(id){const Q=QUIZZES[id];let order=Q.items.map((_,i)=>i).sort(()=>M
 
 // ---------- cross-device sync ----------
 // Claude copy: per-person rows in the artifact's private db. Hosted copy (e.g. GitHub Pages): a private GitHub Gist.
-window.SYNC=(()=>{const KEYS=['kz_done','kz_open','kz_pp','kz_pps','kz_qs','kz_exc','kz_marked'];
+window.SYNC=(()=>{const KEYS=['kz_done','kz_open','kz_pp','kz_pps','kz_qs','kz_exc','kz_marked','kz_plumi_done'];
  const TS=()=>{try{return JSON.parse(localStorage.getItem('kz_ts')||'{}')}catch(e){return{}}};const setTS=o=>{try{localStorage.setItem('kz_ts',JSON.stringify(o))}catch(e){}};
  const raw=k=>localStorage.getItem(k);
  let mode=null,state='off',last=0,timer=null,db=null,uid=null,applying=false;
@@ -1543,9 +1566,9 @@ window.SYNC=(()=>{const KEYS=['kz_done','kz_open','kz_pp','kz_pps','kz_qs','kz_e
  function apply(remote){if(!remote)return false;const t=TS();let changed=false;
   for(const k of KEYS){const r=remote[k];if(!r||typeof r.v!=='string')continue;if((r.t||0)>(t[k]||0)){
    let v=r.v;const mine=raw(k);
-   if(!t[k]&&mine&&(k==='kz_done'||k==='kz_pp')){try{v=JSON.stringify([...new Set([...JSON.parse(r.v),...JSON.parse(mine)])]);t[k]=Date.now();lsSet(k,v);changed=true;continue}catch(e){}}
+    if(!t[k]&&mine&&(k==='kz_done'||k==='kz_pp'||k==='kz_plumi_done')){try{v=JSON.stringify([...new Set([...JSON.parse(r.v),...JSON.parse(mine)])]);t[k]=Date.now();lsSet(k,v);changed=true;continue}catch(e){}}
    lsSet(k,v);t[k]=r.t;changed=true}}
-  if(changed){setTS(t);applying=true;try{DONE=new Set(store.get('kz_done',[]));openUnits=store.get('kz_open',{});exC=store.get('kz_exc','maths');QS=store.get('kz_qs',{});route()}finally{applying=false}}
+  if(changed){setTS(t);applying=true;try{DONE=new Set(store.get('kz_done',[]));PRACTICE_DONE=new Set(store.get('kz_plumi_done',[]));openUnits=store.get('kz_open',{});exC=store.get('kz_exc','maths');QS=store.get('kz_qs',{});route()}finally{applying=false}}
   return changed}
  function touch(k){if(applying||!KEYS.includes(k))return;const t=TS();t[k]=Date.now();setTS(t);if(mode){clearTimeout(timer);timer=setTimeout(push,1500)}}
  // ---- GitHub Gist backend ----
