@@ -1359,21 +1359,29 @@ const pct=list=>list.length?Math.round(list.filter(t=>DONE.has(t.id)).length/lis
 
 // Plumi question-bank routine: two core sessions every week, plus one rotating subject.
 const PLUMI_BANKS={
- maths:{course:'maths',name:'AQA Higher Maths',task:'Complete 10 Higher Maths questions',url:'https://tryplumi.app/question-bank/aqa-gcse-maths'},
- science:{course:'science',name:'Edexcel Combined Science',task:'Complete 10 Combined Science questions',url:'https://tryplumi.app/question-bank/edexcel-gcse-combined-science'},
- englishLang:{course:'english',name:'Edexcel English Language',task:'Complete one English Language question set',url:'https://tryplumi.app/question-bank/edexcel-gcse-english-language'},
- englishLit:{course:'english',name:'Edexcel English Literature',task:'Complete one English Literature question set',url:'https://tryplumi.app/question-bank/edexcel-gcse-english-literature'},
- cs:{course:'cs',name:'OCR Computer Science',task:'Complete 10 Computer Science questions',url:'https://tryplumi.app/question-bank/ocr-gcse-computer-science'},
- business:{course:'business',name:'Edexcel Business',task:'Complete 10 Business questions',url:'https://tryplumi.app/question-bank/edexcel-gcse-business'}
+ maths:{course:'maths',name:'AQA Higher Maths',task:'Finish with a focused set of Higher Maths exam questions',url:'https://tryplumi.app/question-bank/aqa-gcse-maths'},
+ science:{course:'science',name:'Edexcel Combined Science',task:'Finish with a focused set of Combined Science exam questions',url:'https://tryplumi.app/question-bank/edexcel-gcse-combined-science'},
+ englishLang:{course:'english',name:'Edexcel English Language',task:'Finish with a focused English Language question set',url:'https://tryplumi.app/question-bank/edexcel-gcse-english-language'},
+ englishLit:{course:'english',name:'Edexcel English Literature',task:'Finish with a focused English Literature question set',url:'https://tryplumi.app/question-bank/edexcel-gcse-english-literature'},
+ cs:{course:'cs',name:'OCR Computer Science',task:'Finish with a focused set of Computer Science exam questions',url:'https://tryplumi.app/question-bank/ocr-gcse-computer-science'},
+ business:{course:'business',name:'Edexcel Business',task:'Finish with a focused set of Business exam questions',url:'https://tryplumi.app/question-bank/edexcel-gcse-business'}
 };
 const PLUMI_BY_COURSE={maths:[PLUMI_BANKS.maths],science:[PLUMI_BANKS.science],english:[PLUMI_BANKS.englishLang,PLUMI_BANKS.englishLit],cs:[PLUMI_BANKS.cs],business:[PLUMI_BANKS.business]};
-const PLUMI_ROTATION=[PLUMI_BANKS.englishLang,PLUMI_BANKS.cs,PLUMI_BANKS.business,PLUMI_BANKS.englishLit];
+const PLUMI_FRIDAY=[PLUMI_BANKS.englishLang,PLUMI_BANKS.business,PLUMI_BANKS.englishLit];
+const DAY_NAMES=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 let PRACTICE_DONE=new Set(store.get('kz_plumi_done',[]));
-function practiceFor(w,i){const fri=PLUMI_ROTATION[i%PLUMI_ROTATION.length];return[
- {...PLUMI_BANKS.maths,id:`plumi:${w.k}:maths`,day:'MON'},
- {...PLUMI_BANKS.science,id:`plumi:${w.k}:science`,day:'WED'},
- {...fri,id:`plumi:${w.k}:${fri.course}:${i%PLUMI_ROTATION.length}`,day:'FRI'}
-]}
+function finishTask(w,weekIndex,dayIndex,topics){let bank,id;
+ if(dayIndex===1){bank=PLUMI_BANKS.maths;id=`plumi:${w.k}:maths`}
+ else if(dayIndex===2){bank=PLUMI_BANKS.science;id=`plumi:${w.k}:science`}
+ else if(dayIndex===3){bank=PLUMI_BANKS.cs;id=`plumi:${w.k}:cs`}
+ else if(dayIndex===4){bank=PLUMI_FRIDAY[weekIndex%PLUMI_FRIDAY.length];id=`plumi:${w.k}:friday:${weekIndex%PLUMI_FRIDAY.length}`}
+ else if(dayIndex===6)return{id:`plumi:${w.k}:sunday`,course:'maths',name:'Weekly mistake review',task:'Finish by redoing the exam questions you found hardest this week',url:'#exams',internal:true};
+ else{bank=topics.map(t=>(PLUMI_BY_COURSE[t.c.id]||[])[0]).find(Boolean)||PLUMI_BANKS.maths;id=`plumi:${w.k}:${dayIndex}`;bank={...bank,task:"Finish with exam questions from today's topics"}}
+ return{...bank,id}}
+function buildWeekDays(w,weekIndex){const days=DAY_NAMES.map((name,i)=>({name,short:name.slice(0,3).toUpperCase(),topics:[],practice:null}));
+ COURSES.forEach((c,ci)=>w.tasks.filter(t=>t.c===c).forEach((t,j)=>days[(j+ci*2)%6].topics.push(t)));
+ days.forEach(d=>{const queues=COURSES.map(c=>d.topics.filter(t=>t.c===c)),mixed=[];while(queues.some(q=>q.length))queues.forEach(q=>{if(q.length)mixed.push(q.shift())});d.topics=mixed});
+ days.forEach((d,i)=>{d.practice=finishTask(w,weekIndex,i,d.topics);d.practice.day=d.short});return days}
 
 // ---------- plan ----------
 const EXAM=new Date('2027-05-11T09:00:00');
@@ -1385,9 +1393,9 @@ const WEEKS=mondays().map(d=>{const k=d.toISOString().slice(0,10);
   else if(k==='2027-03-29'||k==='2027-04-05'){kind='papers';label='Easter: full timed papers'}
   else if(k==='2027-04-26'||k==='2027-05-03'){kind='papers';label='Final countdown: papers + quotes'}
   return {d,k,kind,label,tasks:[]}});
-WEEKS.forEach((w,i)=>w.practice=practiceFor(w,i));
 (function assign(){const learn=WEEKS.filter(w=>w.kind==='learn');
   COURSES.forEach(c=>{const ts=byC(c.id);ts.forEach((t,i)=>{const w=learn[Math.min(learn.length-1,Math.floor(i*learn.length/ts.length))];w.tasks.push(t)})})})();
+WEEKS.forEach((w,i)=>{w.days=buildWeekDays(w,i);w.practice=w.days.map(d=>d.practice)});
 const curWeek=()=>{const now=new Date();let i=WEEKS.findIndex((w,j)=>now<(WEEKS[j+1]?.d||new Date('2027-05-10')));return Math.max(0,i)};
 const fmt=d=>d.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
 
@@ -1403,7 +1411,7 @@ function side(){const h=location.hash.slice(1)||'home';
   ${COURSES.map(c=>`<a class="nav ${h===c.id?'on':''}" style="--c:${c.color}" href="#${c.id}"><span class="dot"></span>${esc(c.name)}<span class="pc">${pct(byC(c.id))}%</span></a>`).join('')}`}
 
 // ---------- dashboard ----------
-function home(){const all=pct(T);const now=new Date();const days=Math.max(0,Math.ceil((EXAM-now)/864e5));const wi=curWeek(),w=WEEKS[wi];
+function home(){const all=pct(T);const now=new Date();const days=Math.max(0,Math.ceil((EXAM-now)/864e5));const wi=curWeek(),w=WEEKS[wi],di=(now.getDay()+6)%7,today=w.days[di],todayDate=new Date(w.d);todayDate.setDate(todayDate.getDate()+di);
   const C=2*Math.PI*56;
   $('#v-home').innerHTML=`<div class="stag">
   <div class="hero"><div><h1>Hey Kenz 👋</h1><p class="sub">${days} days until your first GCSE exam (mid-May 2027; check your school timetable for exact dates).</p>
@@ -1411,15 +1419,16 @@ function home(){const all=pct(T);const now=new Date();const days=Math.max(0,Math
     <div class="ring"><svg width="132" height="132"><circle class="bg" cx="66" cy="66" r="56"/><circle class="fg" id="ringfg" cx="66" cy="66" r="56" stroke-dasharray="${C}" stroke-dashoffset="${C}"/></svg><b>${all}%<small>overall</small></b></div></div>
   <div class="sec"><h2>Your courses</h2></div>
   <div class="grid g3 stag">${COURSES.map(c=>{const ts=byC(c.id),d=ts.filter(t=>DONE.has(t.id)).length;return `<a class="card scard" style="--c:${c.color}" href="#${c.id}"><div class="ic">${c.icon}</div><h3>${esc(c.name)}</h3><div class="spec">${esc(c.spec)}</div><div class="meta"><span><b>${d}</b> / ${ts.length} topics</span><b>${pct(ts)}%</b></div><div class="bar"><i data-w="${pct(ts)}"></i></div></a>`}).join('')}</div>
-  <div class="sec"><h2>This week · ${fmt(w.d)}</h2><a class="btn sm" href="#plan">Full plan →</a></div>
-  <div class="grid">${w.practice.map(practiceCard).join('')}${w.tasks.length?w.tasks.map(t=>nextRow(t)).join(''):`<div class="card"><b>${esc(w.label)}</b><p class="note">Do one timed past paper per subject. Open them from <a href="#exams" style="color:var(--acc)">Exams</a> and mark them up in the editor.</p></div>`}</div>
+  <div class="sec"><h2>Today · ${today.name} ${fmt(todayDate)}</h2><a class="btn sm" href="#plan">Full week →</a></div>
+  <div class="grid">${today.topics.length?today.topics.map(t=>nextRow(t)).join(''):`<div class="card"><b>${w.label?esc(w.label):'Catch-up and review'}</b><p class="note">Finish anything left from the week, review your mistake list and prepare for the next set of topics.</p></div>`}${practiceCard(today.practice)}</div>
   <div class="sec"><h2>Up next in each course</h2></div>
   <div class="grid">${COURSES.map(c=>{const t=byC(c.id).find(t=>!DONE.has(t.id));return t?nextRow(t):''}).join('')}</div></div>`;
   requestAnimationFrame(()=>{setTimeout(()=>{const r=$('#ringfg');if(r)r.style.strokeDashoffset=C*(1-all/100);animBars()},60)});
 }
 function nextRow(t){return `<a class="next" style="--c:${t.c.color}" href="#${t.c.id}" data-jump="${t.id}"><span class="chk${DONE.has(t.id)?'':''}" style="pointer-events:none;${DONE.has(t.id)?'background:var(--c);border-color:var(--c)':''}"></span><div><div class="tg">${esc(t.c.name)} · ${esc(t.u.name)}</div><div class="tt">${esc(t.title)}</div></div><span class="go">→</span></a>`}
-function practiceCard(p){const d=PRACTICE_DONE.has(p.id),c=COURSES.find(x=>x.id===p.course);return `<div class="next${d?' done':''}" style="--c:${c.color}"><button class="chk" data-practice="${esc(p.id)}" aria-label="Mark question practice done" style="${d?'background:var(--c);border-color:var(--c)':''}"><svg viewBox="0 0 24 24" style="${d?'stroke-dashoffset:0':''}"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><div style="flex:1"><div class="tg">${p.day} · PLUMI · ${esc(p.name)}</div><div class="tt" style="${d?'text-decoration:line-through;color:var(--muted)':''}">${esc(p.task)}</div></div><a class="btn sm" href="${esc(p.url)}" target="_blank" rel="noopener">Questions ↗</a></div>`}
-function practicePlanRow(p){const d=PRACTICE_DONE.has(p.id),c=COURSES.find(x=>x.id===p.course);return `<div class="wt${d?' done':''}" style="--c:${c.color}"><button class="chk" data-practice="${esc(p.id)}" aria-label="Mark question practice done" style="${d?'background:var(--c);border-color:var(--c)':''}"><svg viewBox="0 0 24 24" style="${d?'stroke-dashoffset:0':''}"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><span class="sj">${p.day} · PLUMI</span><span class="tt">${esc(p.task)}</span><a class="btn sm" href="${esc(p.url)}" target="_blank" rel="noopener">Open bank ↗</a></div>`}
+function practiceCard(p){const d=PRACTICE_DONE.has(p.id),c=COURSES.find(x=>x.id===p.course),attrs=p.internal?'':' target="_blank" rel="noopener"';return `<div class="next${d?' done':''}" style="--c:${c.color}"><button class="chk" data-practice="${esc(p.id)}" aria-label="Mark question practice done" style="${d?'background:var(--c);border-color:var(--c)':''}"><svg viewBox="0 0 24 24" style="${d?'stroke-dashoffset:0':''}"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><div style="flex:1"><div class="tg">FINISH · ${esc(p.name)}</div><div class="tt" style="${d?'text-decoration:line-through;color:var(--muted)':''}">${esc(p.task)}</div></div><a class="btn sm" href="${esc(p.url)}"${attrs}>Exam questions ${p.internal?'→':'↗'}</a></div>`}
+function practicePlanRow(p){const d=PRACTICE_DONE.has(p.id),c=COURSES.find(x=>x.id===p.course),attrs=p.internal?'':' target="_blank" rel="noopener"';return `<div class="wt${d?' done':''}" style="--c:${c.color}"><button class="chk" data-practice="${esc(p.id)}" aria-label="Mark question practice done" style="${d?'background:var(--c);border-color:var(--c)':''}"><svg viewBox="0 0 24 24" style="${d?'stroke-dashoffset:0':''}"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><span class="sj">FINISH</span><span class="tt">${esc(p.task)}</span><a class="btn sm" href="${esc(p.url)}"${attrs}>Exam questions ${p.internal?'→':'↗'}</a></div>`}
+function topicPlanRow(t){return `<div class="wt${DONE.has(t.id)?' done':''}" style="--c:${t.c.color}"><button class="chk" data-done="${t.id}" style="${DONE.has(t.id)?'background:var(--c);border-color:var(--c)':''}"><svg viewBox="0 0 24 24" style="${DONE.has(t.id)?'stroke-dashoffset:0':''}"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><span class="sj">${esc(t.c.name)}</span><span class="tt">${esc(t.title)}</span><a class="btn sm yt" href="${esc(vid(t))}" target="_blank" rel="noopener">▶</a><a class="btn sm" href="#${t.c.id}" data-jump="${t.id}">Open</a></div>`}
 function animBars(){$$('.bar i[data-w]').forEach(b=>b.style.width=b.dataset.w+'%')}
 
 // ---------- course ----------
@@ -1447,12 +1456,10 @@ function topicRow(t){const files=t.files.map(f=>/\.png$/.test(f)?`<button class=
 
 // ---------- plan view ----------
 function plan(){const wi=curWeek();
-  $('#v-plan').innerHTML=`<h1>My revision plan</h1><p class="sub">${WEEKS.length} weeks from 16 Nov to the exams. Every topic across your six courses is spread out, with recurring Plumi question-bank sessions on Monday, Wednesday and Friday.</p>
+  $('#v-plan').innerHTML=`<h1>My revision plan</h1><p class="sub">Every topic is divided across Monday to Saturday with a mixture of subjects. Each day finishes with exam questions; Sunday is for catching up and redoing mistakes.</p>
   <div style="margin-top:22px" class="stag">${WEEKS.map((w,i)=>{const td=w.tasks.filter(t=>DONE.has(t.id)).length,pd=w.practice.filter(p=>PRACTICE_DONE.has(p.id)).length,total=w.tasks.length+w.practice.length,p=total?Math.round((td+pd)/total*100):0;
-   return `<div class="week${i===wi?' now open':''}" data-w="${i}"><div class="wh"><span class="wn">WEEK ${i+1}</span><h3>${fmt(w.d)} ${w.label?'· '+esc(w.label):`· ${w.tasks.length} topics`} · 3 question sessions</h3>${i===wi?'<span class="tag">THIS WEEK</span>':i<wi?'<span class="tag">past</span>':''}<div class="bar mini"><i data-w="${p}"></i></div></div>
-   <div class="wb"><div class="qexp" style="margin:0 0 8px"><b>Frequent question practice:</b> do the set, check the mark scheme, and write down one mistake to redo on Sunday.</div>${w.practice.map(practicePlanRow).join('')}${w.tasks.length?w.tasks.map(t=>`<div class="wt${DONE.has(t.id)?' done':''}" style="--c:${t.c.color}"><button class="chk" data-done="${t.id}" style="${DONE.has(t.id)?'background:var(--c);border-color:var(--c)':''}"><svg viewBox="0 0 24 24" style="${DONE.has(t.id)?'stroke-dashoffset:0':''}"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><span class="sj">${esc(t.c.name)}</span><span class="tt">${esc(t.title)}</span><a class="btn sm yt" href="${esc(vid(t))}" target="_blank" rel="noopener">▶</a><a class="btn sm" href="#${t.c.id}" data-jump="${t.id}">Open</a></div>`).join(''):
-   `<p class="note">${w.kind==='papers'?'Each day: one full timed paper in one subject, then mark it with the mark scheme and redo every question you dropped marks on. Do the English quote quizzes daily.':'Catch up on anything unticked, then do one past paper per subject from <a href="#exams" style="color:var(--acc)">Exams</a>.'}</p>`}
-   <p class="note" style="margin-top:8px">Suggested: about 3 topics a day. For each one, watch the video (10 min), make quick notes or flashcards, then do 2–3 exam questions. Sunday is catch-up and mistake-redo day.</p></div></div>`}).join('')}</div>`;
+   return `<div class="week${i===wi?' now open':''}" data-w="${i}"><div class="wh"><span class="wn">WEEK ${i+1}</span><h3>${fmt(w.d)} ${w.label?'· '+esc(w.label):'· daily mixed timetable'}</h3>${i===wi?'<span class="tag">THIS WEEK</span>':i<wi?'<span class="tag">past</span>':''}<div class="bar mini"><i data-w="${p}"></i></div></div>
+   <div class="wb"><div class="qexp" style="margin:0 0 12px"><b>Daily structure:</b> learn or review the mixed topic tasks first, then complete the final exam-question task and check the mark scheme.</div>${w.days.map((d,di)=>{const date=new Date(w.d);date.setDate(date.getDate()+di);const done=d.topics.filter(t=>DONE.has(t.id)).length+(PRACTICE_DONE.has(d.practice.id)?1:0),dayTotal=d.topics.length+1;return `<div class="card" style="margin:10px 0;padding:14px 16px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><h3 style="margin:0;flex:1">${d.name} · ${fmt(date)}</h3><span class="pill">${done}/${dayTotal} done</span></div>${d.topics.length?d.topics.map(topicPlanRow).join(''):`<p class="note" style="margin:8px 0">${di===6?'Catch up on unfinished topics and review the mistakes you recorded this week.':w.kind==='learn'?'Review flashcards or finish anything carried over from the previous day.':'Work through a timed paper section and mark it carefully.'}</p>`}${practicePlanRow(d.practice)}</div>`}).join('')}</div></div>`}).join('')}</div>`;
   setTimeout(()=>{animBars();$('.week.now')?.scrollIntoView({behavior:'smooth',block:'center'})},80)}
 
 // ---------- exams ----------
