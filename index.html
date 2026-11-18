@@ -1463,20 +1463,20 @@ function buildWeekDays(w,weekIndex){const days=Array.from({length:7},(_,i)=>{con
 
 // ---------- plan ----------
 const EXAM=new Date('2027-05-11T09:00:00');
-const PLAN_START=new Date('2026-11-17T00:00:00');
-function weekStarts(){const out=[];let d=new Date(PLAN_START);while(d<=new Date('2027-05-04')){out.push(new Date(d));d.setDate(d.getDate()+7)}return out}
+const PLAN_START=new Date('2026-11-19T00:00:00');
+function weekStarts(){const out=[];let d=new Date(PLAN_START);while(d<=new Date('2027-05-06')){out.push(new Date(d));d.setDate(d.getDate()+7)}return out}
 const localDateKey=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 const WEEKS=weekStarts().map(d=>{const k=localDateKey(d);
   let kind='learn',label='';
-  if(k==='2026-12-22'||k==='2026-12-29'){kind='review';label='Christmas: catch-up & mock papers'}
-  else if(k==='2027-02-16'){kind='review';label='Half term: past-paper week'}
-  else if(k==='2027-03-30'||k==='2027-04-06'){kind='papers';label='Easter: full timed papers'}
-  else if(k==='2027-04-27'||k==='2027-05-04'){kind='papers';label='Final countdown: papers + quotes'}
+  if(k==='2026-12-24'||k==='2026-12-31'){kind='review';label='Christmas: catch-up & mock papers'}
+  else if(k==='2027-02-18'){kind='review';label='Half term: past-paper week'}
+  else if(k==='2027-04-01'||k==='2027-04-08'){kind='papers';label='Easter: full timed papers'}
+  else if(k==='2027-04-29'||k==='2027-05-06'){kind='papers';label='Final countdown: papers + quotes'}
   return {d,k,kind,label,tasks:[]}});
 (function assign(){const learn=WEEKS.filter(w=>w.kind==='learn');
   COURSES.forEach(c=>{const ts=byC(c.id);ts.forEach((t,i)=>{const w=learn[Math.min(learn.length-1,Math.floor(i*learn.length/ts.length))];w.tasks.push(t)})})})();
 WEEKS.forEach((w,i)=>{w.days=buildWeekDays(w,i);w.practice=w.days.map(d=>d.practice)});
-const curWeek=()=>{const now=new Date();let i=WEEKS.findIndex((w,j)=>now<(WEEKS[j+1]?.d||new Date('2027-05-11')));return Math.max(0,i)};
+const curWeek=()=>{const now=new Date();let i=WEEKS.findIndex((w,j)=>now<(WEEKS[j+1]?.d||new Date('2027-05-13')));return Math.max(0,i)};
 const fmt=d=>d.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
 
 // ---------- sidebar ----------
@@ -1499,7 +1499,7 @@ function home(){const all=pct(T);const now=new Date();const days=Math.max(0,Math
     <div class="ring"><svg width="132" height="132"><circle class="bg" cx="66" cy="66" r="56"/><circle class="fg" id="ringfg" cx="66" cy="66" r="56" stroke-dasharray="${C}" stroke-dashoffset="${C}"/></svg><b>${all}%<small>overall</small></b></div></div>
   <div class="sec"><h2>Your courses</h2></div>
   <div class="grid g3 stag">${COURSES.map(c=>{const ts=byC(c.id),d=ts.filter(t=>DONE.has(t.id)).length;return `<a class="card scard" style="--c:${c.color}" href="#${c.id}"><div class="ic">${c.icon}</div><h3>${esc(c.name)}</h3><div class="spec">${esc(c.spec)}</div><div class="meta"><span><b>${d}</b> / ${ts.length} topics</span><b>${pct(ts)}%</b></div><div class="bar"><i data-w="${pct(ts)}"></i></div></a>`}).join('')}</div>
-  <div class="sec"><h2>Today · ${today.name} ${fmt(todayDate)}</h2><a class="btn sm" href="#plan">Full week →</a></div>
+  <div class="sec"><h2>${now<PLAN_START?'Starts':'Today'} · ${today.name} ${fmt(todayDate)}</h2><a class="btn sm" href="#plan">Full week →</a></div>
   <div class="grid">${today.topics.length?today.topics.map(t=>nextRow(t)).join(''):`<div class="card"><b>${w.label?esc(w.label):'Catch-up and review'}</b><p class="note">Finish anything left from the week, review your mistake list and prepare for the next set of topics.</p></div>`}${practiceCard(today.practice)}</div>
   <div class="sec"><h2>Up next in each course</h2></div>
   <div class="grid">${COURSES.map(c=>{const t=byC(c.id).find(t=>!DONE.has(t.id));return t?nextRow(t):''}).join('')}</div></div>`;
@@ -1536,7 +1536,7 @@ function topicRow(t){const files=t.files.map(f=>/\.png$/.test(f)?`<button class=
 
 // ---------- plan view ----------
 function plan(){const wi=curWeek();
-  $('#v-plan').innerHTML=`<h1>My revision plan</h1><p class="sub">The timetable restarts from 17 November, with a fresh seven-day block every Tuesday. Topics are mixed across six study days, each day finishes with exam questions, and Sunday is for catching up and redoing mistakes.</p>
+  $('#v-plan').innerHTML=`<h1>My revision plan</h1><p class="sub">The timetable restarts from Thursday 19 November, with a fresh seven-day block every Thursday. Topics are mixed across six study days, each day finishes with exam questions, and Sunday is for catching up and redoing mistakes.</p>
   <div style="margin-top:22px" class="stag">${WEEKS.map((w,i)=>{const td=w.tasks.filter(t=>DONE.has(t.id)).length,pd=w.practice.filter(p=>PRACTICE_DONE.has(p.id)).length,total=w.tasks.length+w.practice.length,p=total?Math.round((td+pd)/total*100):0;
    return `<div class="week${i===wi?' now open':''}" data-w="${i}"><div class="wh"><span class="wn">WEEK ${i+1}</span><h3>${fmt(w.d)} ${w.label?'· '+esc(w.label):'· daily mixed timetable'}</h3>${i===wi?'<span class="tag">THIS WEEK</span>':i<wi?'<span class="tag">past</span>':''}<div class="bar mini"><i data-w="${p}"></i></div></div>
    <div class="wb"><div class="qexp" style="margin:0 0 12px"><b>Daily structure:</b> learn or review the mixed topic tasks first, then complete the final exam-question task and check the mark scheme.</div>${w.days.map((d,di)=>{const date=new Date(w.d);date.setDate(date.getDate()+di);const done=d.topics.filter(t=>DONE.has(t.id)).length+(PRACTICE_DONE.has(d.practice.id)?1:0),dayTotal=d.topics.length+1;return `<div class="card" style="margin:10px 0;padding:14px 16px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><h3 style="margin:0;flex:1">${d.name} · ${fmt(date)}</h3><span class="pill">${done}/${dayTotal} done</span></div>${d.topics.length?d.topics.map(topicPlanRow).join(''):`<p class="note" style="margin:8px 0">${di===6?'Catch up on unfinished topics and review the mistakes you recorded this week.':w.kind==='learn'?'Review flashcards or finish anything carried over from the previous day.':'Work through a timed paper section and mark it carefully.'}</p>`}${practicePlanRow(d.practice)}</div>`}).join('')}</div></div>`}).join('')}</div>`;
