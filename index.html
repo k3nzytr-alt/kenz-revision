@@ -293,7 +293,7 @@ h2{font-size:19px;letter-spacing:-.01em;margin:0;font-weight:700}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
-<script src="video-map.js?v=20261123"></script>
+<script src="video-map.js?v=20261123-2"></script>
 <script>
 // ---------- COURSE DATA (full specifications) ----------
 // topic: [title, youtube query, hosted files[], quizId, sharepointPath]
@@ -1541,7 +1541,7 @@ function topicRow(t){const files=t.files.map(f=>/\.png$/.test(f)?`<button class=
 
 // ---------- plan view ----------
 function plan(){const wi=curWeek();
-  $('#v-plan').innerHTML=`<h1>My revision plan</h1><p class="sub">The timetable restarts from Monday 23 November, with a fresh seven-day block every Monday. English literature rotates through Romeo &amp; Juliet, Journey's End and Frankenstein, while Language and poetry stay mixed in. Each study day finishes with exam questions, and Sunday is for catching up and redoing mistakes.</p>
+  $('#v-plan').innerHTML=`<h1>My revision plan</h1><p class="sub">The timetable restarts from Monday 23 November, with a fresh seven-day block every Monday. Edexcel English Literature rotates through Romeo &amp; Juliet, Journey's End and Frankenstein, while Edexcel Language and poetry stay mixed in. Each study day finishes with exam questions, and Sunday is for catching up and redoing mistakes.</p>
   <div style="margin-top:22px" class="stag">${WEEKS.map((w,i)=>{const td=w.tasks.filter(t=>DONE.has(t.id)).length,pd=w.practice.filter(p=>PRACTICE_DONE.has(p.id)).length,total=w.tasks.length+w.practice.length,p=total?Math.round((td+pd)/total*100):0;
    return `<div class="week${i===wi?' now open':''}" data-w="${i}"><div class="wh"><span class="wn">WEEK ${i+1}</span><h3>${fmt(w.d)} ${w.label?'· '+esc(w.label):'· daily mixed timetable'}</h3>${i===wi?'<span class="tag">THIS WEEK</span>':i<wi?'<span class="tag">past</span>':''}<div class="bar mini"><i data-w="${p}"></i></div></div>
    <div class="wb"><div class="qexp" style="margin:0 0 12px"><b>Daily structure:</b> learn or review the mixed topic tasks first, then complete the final exam-question task and check the mark scheme.</div>${w.days.map((d,di)=>{const date=new Date(w.d);date.setDate(date.getDate()+di);const done=d.topics.filter(t=>DONE.has(t.id)).length+(PRACTICE_DONE.has(d.practice.id)?1:0),dayTotal=d.topics.length+1;return `<div class="card" style="margin:10px 0;padding:14px 16px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><h3 style="margin:0;flex:1">${d.name} · ${fmt(date)}</h3><span class="pill">${done}/${dayTotal} done</span></div>${d.topics.length?d.topics.map(topicPlanRow).join(''):`<p class="note" style="margin:8px 0">${di===6?'Catch up on unfinished topics and review the mistakes you recorded this week.':w.kind==='learn'?'Review flashcards or finish anything carried over from the previous day.':'Work through a timed paper section and mark it carefully.'}</p>`}${practicePlanRow(d.practice)}</div>`}).join('')}</div></div>`}).join('')}</div>`;
