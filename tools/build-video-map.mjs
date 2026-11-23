@@ -19,9 +19,12 @@ const board={maths:'AQA',science:'Edexcel',english:'Edexcel',cs:'OCR J277',geogr
 const stop=new Set('gcse aqa edexcel ocr higher combined science maths mathematics english language literature computer geography business topic paper section spec specification the and or of to in for with from how what why using use an a part lesson revision exam exams marks mark'.split(' '));
 const words=s=>[...new Set(String(s).toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9²³]+/g,' ').split(/\s+/).filter(w=>w.length>2&&!stop.has(w)&&!/^\d+$/.test(w)))];
 const channelMatch=(actual,wanted)=>words(actual).some(w=>words(wanted).includes(w));
+const wrongLevelVideo=title=>/\bA[ -]?Level\b|\bAS Level\b|\bIAL\b|International A Level|\bIGCSE\b|International GCSE|\bKS[1235]\b|primary school|elementary|\bSATs?\b|\bAP\b|college|university|undergraduate|postgraduate|degree-level/i.test(title||'');
 function score(v,t,index){
   const target=words(`${t.q} ${t.title}`),title=words(v.title),matches=target.filter(w=>title.includes(w)).length;
   let n=(matches/Math.max(2,Math.min(target.length,9)))*100+(channelMatch(v.channel,preferred[t.course])?28:0)+Math.max(0,8-index);
+  if(/\bGCSE\b/i.test(v.title))n+=18;
+  if(wrongLevelVideo(v.title))n-=200;
   if(/shorts?/i.test(v.title)||Number(v.duration||0)<75)n-=18;
   return Math.round(n);
 }
@@ -47,8 +50,9 @@ async function search(query){
 let cache={};try{cache=JSON.parse(fs.readFileSync(cachePath,'utf8'))}catch(e){}
 const limitArg=process.argv.find(x=>x.startsWith('--limit='));
 const retryWeak=process.argv.includes('--retry-weak');
-const work=retryWeak?topics.filter(t=>!cache[t.id]?.id||(cache[t.id].score||0)<48):(limitArg?topics.slice(0,Number(limitArg.split('=')[1])):topics);
-if(retryWeak)work.forEach(t=>delete cache[t.id]);
+const retryAdvanced=process.argv.includes('--retry-advanced');
+const work=retryAdvanced?topics.filter(t=>wrongLevelVideo(cache[t.id]?.title)):retryWeak?topics.filter(t=>!cache[t.id]?.id||(cache[t.id].score||0)<48):(limitArg?topics.slice(0,Number(limitArg.split('=')[1])):topics);
+if(retryWeak||retryAdvanced)work.forEach(t=>delete cache[t.id]);
 let cursor=0,finished=0;
 async function worker(){while(true){
   const i=cursor++;if(i>=work.length)return;const t=work[i];if(cache[t.id]?.id){finished++;continue}
