@@ -293,7 +293,7 @@ h2{font-size:19px;letter-spacing:-.01em;margin:0;font-weight:700}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
-<script src="video-map.js?v=20261123-3"></script>
+<script src="video-map.js?v=20261123-4"></script>
 <script>
 // ---------- COURSE DATA (full specifications) ----------
 // topic: [title, youtube query, hosted files[], quizId, sharepointPath]
@@ -304,7 +304,7 @@ const GC='Geography/Case study reading/';
 
 const COURSES=[
 /* ======================= MATHS ======================= */
-{id:'maths',name:'Maths',spec:'AQA 8300 · Higher · all 97 spec codes N1–S6, broken into 229 skills',color:'#5b8cff',icon:'∑',ch:'Corbettmaths',
+{id:'maths',name:'Maths',spec:'AQA 8300 · Higher · all 97 spec codes N1–S6, broken into 232 skills',color:'#5b8cff',icon:'∑',ch:'Corbettmaths',
  papers:['Paper 1 · Non-calculator · 1h30 · 80 marks','Paper 2 · Calculator · 1h30 · 80 marks','Paper 3 · Calculator · 1h30 · 80 marks'],
  units:[
  {name:"Number (N1–N16)",topics:[
@@ -559,7 +559,7 @@ const COURSES=[
   {t:'Aiming for Grade 7 & 9 booklets',sp:'Maths/Revision Materials/Aiming For Booklets'},
   {t:'Diagnostic multiple-choice (Higher)',sp:'Maths/Revision Materials/Multiple Choice Questions'},
   {t:'Mathswatch video list',sp:'Maths/Revision Materials/Maths-GCSE-Mathswatch-Video-List.pdf',file:true}],
- boards:[['AQA past papers & mark schemes','https://www.aqa.org.uk/find-past-papers-and-mark-schemes'],['Corbettmaths practice papers & 5-a-day','https://corbettmaths.com/'],['Maths Genie (questions by topic)','https://www.mathsgenie.co.uk/'],['Physics & Maths Tutor (AQA)','https://www.physicsandmathstutor.com/maths-revision/gcse-aqa/']]},
+ boards:[['Official AQA 8300 specification','https://www.aqa.org.uk/subjects/mathematics/gcse/mathematics-8300/specification'],['AQA past papers & mark schemes','https://www.aqa.org.uk/find-past-papers-and-mark-schemes'],['Corbettmaths practice papers & 5-a-day','https://corbettmaths.com/'],['Maths Genie (questions by topic)','https://www.mathsgenie.co.uk/'],['Physics & Maths Tutor (AQA)','https://www.physicsandmathstutor.com/maths-revision/gcse-aqa/']]},
 
 /* ======================= ENGLISH ======================= */
 {id:'english',name:'English',spec:'Edexcel · Language 1EN0 + Literature 1ET0',color:'#ff7a59',icon:'✒',ch:'Mr Bruff',
@@ -711,7 +711,7 @@ const COURSES=[
   {t:'Journey\'s End full annotations',sp:'English/Journey\'s End/Journey\'s End annotations/JE full annotations.pdf',file:true},
   {t:'Frankenstein annotations',sp:'English/Frankenstein/Frankenstein/Frankenstein annotations final.pdf',file:true},
   {t:'Conflict poetry anthology',sp:'English/Poetry/Conflict Poetry.pdf',file:true}],
- boards:[['Edexcel English Language past papers','https://qualifications.pearson.com/en/qualifications/edexcel-gcses/english-language-2015.coursematerials.html'],['Edexcel English Literature past papers','https://qualifications.pearson.com/en/qualifications/edexcel-gcses/english-literature-2015.coursematerials.html']]},
+ boards:[['Official Edexcel 1EN0 Language specification','https://qualifications.pearson.com/en/qualifications/edexcel-gcses/english-language-2015.html'],['Official Edexcel 1ET0 Literature specification','https://qualifications.pearson.com/en/qualifications/edexcel-gcses/english-literature-2015.html'],['Edexcel English Language past papers','https://qualifications.pearson.com/en/qualifications/edexcel-gcses/english-language-2015.coursematerials.html'],['Edexcel English Literature past papers','https://qualifications.pearson.com/en/qualifications/edexcel-gcses/english-literature-2015.coursematerials.html']]},
 
 /* ======================= SCIENCE ======================= */
 {id:'science',name:'Combined Science',spec:'Edexcel 1SC0 · Higher · every Combined spec statement (biology-only points excluded), 18 core practicals',color:'#3ddc97',icon:'⚗',ch:'Freesciencelessons',
@@ -1013,7 +1013,7 @@ const COURSES=[
   ["6-mark extended answers","GCSE science 6 mark questions"],
   ["Core practical questions: variables, method & evaluation","GCSE science required practical questions"]]}],
  resources:[{t:'Physics Paper 1 revision booster (school)',sp:'Science/Physics-Paper-1-Revision-Booster.pptx',file:true}],
- boards:[['Edexcel Combined Science past papers','https://qualifications.pearson.com/en/qualifications/edexcel-gcses/sciences-2016.coursematerials.html'],['Physics & Maths Tutor: Edexcel Combined','https://www.physicsandmathstutor.com/'],['Cognito (free science courses)','https://cognitoedu.org/']]},
+ boards:[['Official Edexcel 1SC0 specification','https://qualifications.pearson.com/content/dam/pdf/GCSE/Science/2016/Specification/gcse-combinedscience-spec.pdf'],['Edexcel Combined Science past papers','https://qualifications.pearson.com/en/qualifications/edexcel-gcses/sciences-2016.coursematerials.html'],['Physics & Maths Tutor: Edexcel Combined','https://www.physicsandmathstutor.com/'],['Cognito (free science courses)','https://cognitoedu.org/']]},
 
 /* ======================= COMPUTER SCIENCE ======================= */
 {id:'cs',name:'Computer Science',spec:'OCR J277 · every spec sub-section 1.1.1–2.5.2',color:'#22c4ee',icon:'⌘',ch:"Craig 'n' Dave",
@@ -1120,7 +1120,7 @@ const COURSES=[
   ["Paper 2 Section B: writing & refining code in the exam (ERL or Python)","OCR J277 paper 2 section B"],
   ["Extended-response (8-mark) questions","OCR J277 8 mark question"]]}],
  resources:[{t:'Programming challenges (OCR tasks)',f:CS('programmingchallenges')}],
- boards:[['OCR J277 past paper finder','https://www.ocr.org.uk/qualifications/past-paper-finder/'],['Craig \'n\' Dave','https://www.craigndave.org/'],['Physics & Maths Tutor: OCR CS','https://www.physicsandmathstutor.com/computer-science-revision/gcse-ocr/']]},
+ boards:[['Official OCR J277 specification','https://www.ocr.org.uk/qualifications/gcse/computer-science-j277-from-2020/'],['OCR J277 past paper finder','https://www.ocr.org.uk/qualifications/past-paper-finder/'],['Craig \'n\' Dave','https://www.craigndave.org/'],['Physics & Maths Tutor: OCR CS','https://www.physicsandmathstutor.com/computer-science-revision/gcse-ocr/']]},
 
 /* ======================= GEOGRAPHY ======================= */
 {id:'geography',name:'Geography',spec:'OCR A J383 · every key idea 1.1.1–2.3.6 + Paper 3 skills',color:'#a3e635',icon:'⛰',ch:'Time for Geography',
@@ -1236,7 +1236,7 @@ const COURSES=[
   {t:'All case study readings',sp:'Geography/Case study reading'},
   {t:'Paper 1 & 2 booster slides',sp:'Geography/Revision 2025-26'},
   {t:'Easter school booklets',sp:'Geography/Revision 2024-25/Easter School'}],
- boards:[['OCR Geography A past paper finder','https://www.ocr.org.uk/qualifications/past-paper-finder/'],['Time for Geography','https://timeforgeography.co.uk/'],['Internet Geography','https://www.internetgeography.net/']]},
+ boards:[['Official OCR A J383 specification','https://www.ocr.org.uk/qualifications/gcse/geography-a-geographical-themes-j383-from-2016/'],['OCR Geography A past paper finder','https://www.ocr.org.uk/qualifications/past-paper-finder/'],['Time for Geography','https://timeforgeography.co.uk/'],['Internet Geography','https://www.internetgeography.net/']]},
 
 /* ======================= BUSINESS ======================= */
 {id:'business',name:'Business',spec:'Edexcel 1BS0 · every subtopic 1.1.1–2.5.4, split by spec bullet',color:'#f5b942',icon:'£',ch:'Two Teachers',
@@ -1347,7 +1347,7 @@ const COURSES=[
   ["Short-answer: state, outline & explain (1–3 marks)","Edexcel GCSE business explain question"],
   ["Analyse (6) & evaluate / justify (9 & 12-mark) questions","Edexcel GCSE business 12 mark question"]]}],
  resources:[{t:'Theme 2 knowledge organiser',f:'gcse-business--ko-theme-2-business-year-11.pdf'}],
- boards:[['Edexcel GCSE Business past papers','https://qualifications.pearson.com/en/qualifications/edexcel-gcses/business-2017.coursematerials.html'],['tutor2u Business','https://www.tutor2u.net/business'],['Physics & Maths Tutor: Edexcel Business','https://www.physicsandmathstutor.com/']]}
+ boards:[['Official Edexcel 1BS0 specification','https://qualifications.pearson.com/en/qualifications/edexcel-gcses/business-2017.html'],['Edexcel GCSE Business past papers','https://qualifications.pearson.com/en/qualifications/edexcel-gcses/business-2017.coursematerials.html'],['tutor2u Business','https://www.tutor2u.net/business'],['Physics & Maths Tutor: Edexcel Business','https://www.physicsandmathstutor.com/']]}
 ];
 
 // Quote quizzes (from your own key-quote sheets)
