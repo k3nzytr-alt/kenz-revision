@@ -1436,7 +1436,7 @@ COURSES.forEach(c=>c.units.forEach((u,ui)=>u.topics.forEach((t,ti)=>{
 const byC=id=>T.filter(t=>t.c.id===id);
 const pct=list=>list.length?Math.round(list.filter(t=>DONE.has(t.id)).length/list.length*100):0;
 
-// Plumi question-bank routine: two core sessions every week, plus one rotating subject.
+// One subject per day, followed by exam questions for that same subject.
 const PLUMI_BANKS={
  maths:{course:'maths',name:'AQA Higher Maths',task:'Finish with a focused set of Higher Maths exam questions',url:'https://tryplumi.app/question-bank/aqa-gcse-maths'},
  science:{course:'science',name:'Edexcel Combined Science',task:'Finish with a focused set of Combined Science exam questions',url:'https://tryplumi.app/question-bank/edexcel-gcse-combined-science'},
@@ -1446,20 +1446,15 @@ const PLUMI_BANKS={
  business:{course:'business',name:'Edexcel Business',task:'Finish with a focused set of Business exam questions',url:'https://tryplumi.app/question-bank/edexcel-gcse-business'}
 };
 const PLUMI_BY_COURSE={maths:[PLUMI_BANKS.maths],science:[PLUMI_BANKS.science],english:[PLUMI_BANKS.englishLang,PLUMI_BANKS.englishLit],cs:[PLUMI_BANKS.cs],business:[PLUMI_BANKS.business]};
-const PLUMI_FRIDAY=[PLUMI_BANKS.englishLang,PLUMI_BANKS.business,PLUMI_BANKS.englishLit];
+const SUBJECT_DAY={1:'english',2:'maths',3:'science',4:'cs',5:'geography',6:'business'};
 let PRACTICE_DONE=new Set(store.get('kz_plumi_done',[]));
-function finishTask(w,weekIndex,dayIndex,weekday,topics){let bank,id;
- if(weekday===2){bank=PLUMI_BANKS.maths;id=`plumi:${w.k}:maths`}
- else if(weekday===3){bank=PLUMI_BANKS.science;id=`plumi:${w.k}:science`}
- else if(weekday===4){bank=PLUMI_BANKS.cs;id=`plumi:${w.k}:cs`}
- else if(weekday===5){bank=PLUMI_FRIDAY[weekIndex%PLUMI_FRIDAY.length];id=`plumi:${w.k}:friday:${weekIndex%PLUMI_FRIDAY.length}`}
- else if(weekday===0)return{id:`plumi:${w.k}:sunday`,course:'maths',name:'Weekly mistake review',task:'Finish by redoing the exam questions you found hardest this week',url:'#exams',internal:true};
- else{bank=topics.map(t=>(PLUMI_BY_COURSE[t.c.id]||[])[0]).find(Boolean)||PLUMI_BANKS.maths;id=`plumi:${w.k}:${dayIndex}`;bank={...bank,task:"Finish with exam questions from today's topics"}}
- return{...bank,id}}
-function buildWeekDays(w,weekIndex){const days=Array.from({length:7},(_,i)=>{const date=new Date(w.d);date.setDate(date.getDate()+i);const name=date.toLocaleDateString('en-GB',{weekday:'long'});return{name,short:name.slice(0,3).toUpperCase(),weekday:date.getDay(),topics:[],practice:null}}),study=days.map((d,i)=>d.weekday===0?null:i).filter(i=>i!=null);
- COURSES.forEach((c,ci)=>w.tasks.filter(t=>t.c===c).forEach((t,j)=>days[study[(j+ci*2)%study.length]].topics.push(t)));
- days.forEach(d=>{const queues=COURSES.map(c=>d.topics.filter(t=>t.c===c)),mixed=[];while(queues.some(q=>q.length))queues.forEach(q=>{if(q.length)mixed.push(q.shift())});d.topics=mixed});
- days.forEach((d,i)=>{d.practice=finishTask(w,weekIndex,i,d.weekday,d.topics);d.practice.day=d.short});return days}
+function finishTask(w,weekIndex,weekday,course){
+ if(weekday===0)return{id:`plumi:${w.k}:sunday`,course:'maths',name:'Weekly mistake review',task:'Redo the exam questions you found hardest this week',url:'#exams',internal:true};
+ if(course==='geography')return{id:`plumi:${w.k}:geography`,course,name:'OCR A Geography exam questions',task:'Finish with Geography exam questions and mark them carefully',url:'#exams',internal:true};
+ const bank=course==='english'?(weekIndex%2?PLUMI_BANKS.englishLang:PLUMI_BANKS.englishLit):(PLUMI_BY_COURSE[course]||[])[0];
+ return{...bank,id:`plumi:${w.k}:${course}`,task:`Finish with ${COURSES.find(c=>c.id===course)?.name||bank.name} exam questions`}}
+function buildWeekDays(w,weekIndex){const days=Array.from({length:7},(_,i)=>{const date=new Date(w.d);date.setDate(date.getDate()+i);const name=date.toLocaleDateString('en-GB',{weekday:'long'}),weekday=date.getDay(),course=SUBJECT_DAY[weekday]||null;return{name,short:name.slice(0,3).toUpperCase(),weekday,course,topics:course?w.tasks.filter(t=>t.c.id===course):[],practice:null}});
+ days.forEach(d=>{d.practice=finishTask(w,weekIndex,d.weekday,d.course);d.practice.day=d.short});return days}
 
 // ---------- plan ----------
 const EXAM=new Date('2027-05-11T09:00:00');
@@ -1541,10 +1536,10 @@ function topicRow(t){const files=t.files.map(f=>/\.png$/.test(f)?`<button class=
 
 // ---------- plan view ----------
 function plan(){const wi=curWeek();
-  $('#v-plan').innerHTML=`<h1>My revision plan</h1><p class="sub">The timetable restarts from Monday 23 November, with a fresh seven-day block every Monday. Edexcel English Literature rotates through Romeo &amp; Juliet, Journey's End and Frankenstein, while Edexcel Language and poetry stay mixed in. Each study day finishes with exam questions, and Sunday is for catching up and redoing mistakes.</p>
+  $('#v-plan').innerHTML=`<h1>My revision plan</h1><p class="sub">One subject per day: English on Monday, Maths on Tuesday, Combined Science on Wednesday, Computer Science on Thursday, Geography on Friday and Business on Saturday. English Literature rotates through Romeo &amp; Juliet, Journey's End and Frankenstein. Each day finishes with exam questions for that subject; Sunday is for catching up and redoing mistakes.</p>
   <div style="margin-top:22px" class="stag">${WEEKS.map((w,i)=>{const td=w.tasks.filter(t=>DONE.has(t.id)).length,pd=w.practice.filter(p=>PRACTICE_DONE.has(p.id)).length,total=w.tasks.length+w.practice.length,p=total?Math.round((td+pd)/total*100):0;
-   return `<div class="week${i===wi?' now open':''}" data-w="${i}"><div class="wh"><span class="wn">WEEK ${i+1}</span><h3>${fmt(w.d)} ${w.label?'· '+esc(w.label):'· daily mixed timetable'}</h3>${i===wi?'<span class="tag">THIS WEEK</span>':i<wi?'<span class="tag">past</span>':''}<div class="bar mini"><i data-w="${p}"></i></div></div>
-   <div class="wb"><div class="qexp" style="margin:0 0 12px"><b>Daily structure:</b> learn or review the mixed topic tasks first, then complete the final exam-question task and check the mark scheme.</div>${w.days.map((d,di)=>{const date=new Date(w.d);date.setDate(date.getDate()+di);const done=d.topics.filter(t=>DONE.has(t.id)).length+(PRACTICE_DONE.has(d.practice.id)?1:0),dayTotal=d.topics.length+1;return `<div class="card" style="margin:10px 0;padding:14px 16px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><h3 style="margin:0;flex:1">${d.name} · ${fmt(date)}</h3><span class="pill">${done}/${dayTotal} done</span></div>${d.topics.length?d.topics.map(topicPlanRow).join(''):`<p class="note" style="margin:8px 0">${di===6?'Catch up on unfinished topics and review the mistakes you recorded this week.':w.kind==='learn'?'Review flashcards or finish anything carried over from the previous day.':'Work through a timed paper section and mark it carefully.'}</p>`}${practicePlanRow(d.practice)}</div>`}).join('')}</div></div>`}).join('')}</div>`;
+   return `<div class="week${i===wi?' now open':''}" data-w="${i}"><div class="wh"><span class="wn">WEEK ${i+1}</span><h3>${fmt(w.d)} ${w.label?'· '+esc(w.label):'· one subject each day'}</h3>${i===wi?'<span class="tag">THIS WEEK</span>':i<wi?'<span class="tag">past</span>':''}<div class="bar mini"><i data-w="${p}"></i></div></div>
+   <div class="wb"><div class="qexp" style="margin:0 0 12px"><b>Daily structure:</b> learn or review the topics from today's subject, then complete its exam-question task and check the mark scheme.</div>${w.days.map((d,di)=>{const date=new Date(w.d);date.setDate(date.getDate()+di);const done=d.topics.filter(t=>DONE.has(t.id)).length+(PRACTICE_DONE.has(d.practice.id)?1:0),dayTotal=d.topics.length+1,subject=d.course?COURSES.find(c=>c.id===d.course):null;return `<div class="card" style="margin:10px 0;padding:14px 16px;${subject?`--c:${subject.color}`:''}"><div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><h3 style="margin:0;flex:1">${d.name} · ${fmt(date)}${subject?` · ${esc(subject.name)}`:''}</h3><span class="pill">${done}/${dayTotal} done</span></div>${d.topics.length?d.topics.map(topicPlanRow).join(''):`<p class="note" style="margin:8px 0">${di===6?'Catch up on unfinished topics and review the mistakes you recorded this week.':w.kind==='learn'?'Review flashcards or finish anything carried over for this subject.':'Work through a timed paper section for this subject and mark it carefully.'}</p>`}${practicePlanRow(d.practice)}</div>`}).join('')}</div></div>`}).join('')}</div>`;
   setTimeout(()=>{animBars();$('.week.now')?.scrollIntoView({behavior:'smooth',block:'center'})},80)}
 
 // ---------- exams ----------
