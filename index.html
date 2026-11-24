@@ -293,7 +293,7 @@ h2{font-size:19px;letter-spacing:-.01em;margin:0;font-weight:700}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
-<script src="video-map.js?v=20261123-4"></script>
+<script src="video-map.js?v=20261124-1"></script>
 <script>
 // ---------- COURSE DATA (full specifications) ----------
 // topic: [title, youtube query, hosted files[], quizId, sharepointPath]
@@ -559,7 +559,7 @@ const COURSES=[
   {t:'Aiming for Grade 7 & 9 booklets',sp:'Maths/Revision Materials/Aiming For Booklets'},
   {t:'Diagnostic multiple-choice (Higher)',sp:'Maths/Revision Materials/Multiple Choice Questions'},
   {t:'Mathswatch video list',sp:'Maths/Revision Materials/Maths-GCSE-Mathswatch-Video-List.pdf',file:true}],
- boards:[['Official AQA 8300 specification','https://www.aqa.org.uk/subjects/mathematics/gcse/mathematics-8300/specification'],['AQA past papers & mark schemes','https://www.aqa.org.uk/find-past-papers-and-mark-schemes'],['Corbettmaths practice papers & 5-a-day','https://corbettmaths.com/'],['Maths Genie (questions by topic)','https://www.mathsgenie.co.uk/'],['Physics & Maths Tutor (AQA)','https://www.physicsandmathstutor.com/maths-revision/gcse-aqa/']]},
+ boards:[['Official AQA 8300 specification','https://www.aqa.org.uk/subjects/mathematics/gcse/mathematics-8300/specification'],['AQA past papers & mark schemes','https://www.aqa.org.uk/find-past-papers-and-mark-schemes'],['1st Class Maths AQA revision','https://www.1stclassmaths.com/aqarevision'],['Corbettmaths practice papers & 5-a-day','https://corbettmaths.com/'],['Maths Genie (questions by topic)','https://www.mathsgenie.co.uk/'],['Physics & Maths Tutor (AQA)','https://www.physicsandmathstutor.com/maths-revision/gcse-aqa/']]},
 
 /* ======================= ENGLISH ======================= */
 {id:'english',name:'English',spec:'Edexcel · Language 1EN0 + Literature 1ET0',color:'#ff7a59',icon:'✒',ch:'Mr Bruff',
@@ -1537,7 +1537,7 @@ function topicRow(t){const files=t.files.map(f=>/\.png$/.test(f)?`<button class=
   const v2=vid(t,1),mg=mgOf(t).map(n=>MG[n]).filter(Boolean);
   const mgb=mg.length?`<span class="mg">${mg.map((m,i)=>`<a class="btn sm mgb" href="${esc(m[1])}" target="_blank" rel="noopener" title="Maths Genie ${esc(m[0])}: video + worked examples">🧞 ${esc(m[0].length>24?m[0].slice(0,22)+'…':m[0])}</a>${m[2]?`<a class="btn sm${HAVE.has(lname(m[2]))?' have':''}" href="${esc(m[2])}" data-ext="${esc(m[2])}" data-name="MG ${esc(m[0])} questions">📝 Qs</a><a class="btn sm${HAVE.has(lname(m[3]))?' have':''}" href="${esc(m[3])}" data-ext="${esc(m[3])}" data-name="MG ${esc(m[0])} answers">✓ Ans</a>`:''}`).join('')}</span>`:'';
   return `<div class="topic${DONE.has(t.id)?' done':''}" data-t="${t.id}" style="--c:${t.c.color}"><button class="chk" data-done="${t.id}" aria-label="Mark done"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><span class="tt">${esc(t.title)}</span>
-  <span class="tact"><a class="btn sm yt" href="${esc(vid(t))}" target="_blank" rel="noopener" title="${esc(VIDEO_TITLES[t.id]||'Exact topic video')}">▶ Exact video</a>${v2?`<a class="btn sm yt2" href="${esc(v2)}" target="_blank" rel="noopener">▶ ${esc(VIDS[t.c.id][1][0])}</a>`:''}<button class="btn sm qz" data-tq="${t.id}">🧠 Quiz${QS[t.id]!=null?` <b style="color:${QS[t.id]>=80?'#3ddc97':QS[t.id]>=50?'#f5b942':'#ff7a59'}">${QS[t.id]}%</b>`:''}</button><button class="btn sm ln" data-tl="${t.id}">📘 Learn</button>${mgb}${files}${t.sp?`<a class="btn sm" href="${esc(spUrl(t.sp,true))}" target="_blank" rel="noopener">📄 School notes</a>`:''}${t.quiz?`<button class="btn sm" data-quiz="${t.quiz}">⚡ Quote quiz</button>`:''}</span></div>`}
+  <span class="tact"><a class="btn sm yt" href="${esc(vid(t))}" target="_blank" rel="noopener" title="${esc(VIDEO_TITLES[t.id]||'Exact topic video')}">${VIDEO_TITLES[t.id]?.startsWith('1st Class Maths')?'▶ 1st Class video':'▶ Exact video'}</a>${v2?`<a class="btn sm yt2" href="${esc(v2)}" target="_blank" rel="noopener">▶ ${esc(VIDS[t.c.id][1][0])}</a>`:''}<button class="btn sm qz" data-tq="${t.id}">🧠 Quiz${QS[t.id]!=null?` <b style="color:${QS[t.id]>=80?'#3ddc97':QS[t.id]>=50?'#f5b942':'#ff7a59'}">${QS[t.id]}%</b>`:''}</button><button class="btn sm ln" data-tl="${t.id}">📘 Learn</button>${mgb}${files}${t.sp?`<a class="btn sm" href="${esc(spUrl(t.sp,true))}" target="_blank" rel="noopener">📄 School notes</a>`:''}${t.quiz?`<button class="btn sm" data-quiz="${t.quiz}">⚡ Quote quiz</button>`:''}</span></div>`}
 
 // ---------- plan view ----------
 function plan(){const wi=curWeek();

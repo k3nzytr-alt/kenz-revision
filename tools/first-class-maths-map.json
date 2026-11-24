@@ -1,0 +1,667 @@
+{
+  "maths:n4-hcf-lcm-incl-venn-diagram-method": {
+    "id": "kHLwbPwvTtw",
+    "title": "1st Class Maths — HCF and LCM",
+    "sourceTopic": "HCF and LCM",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.687
+  },
+  "maths:n7-fractional-indices": {
+    "id": "s7meFR3BKxs",
+    "title": "1st Class Maths — Fractional Indices",
+    "sourceTopic": "Fractional Indices",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:n8-expanding-brackets-with-surds": {
+    "id": "auYQ38gjJzk",
+    "title": "1st Class Maths — Surds and Brackets",
+    "sourceTopic": "Surds and Brackets",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.783
+  },
+  "maths:n9-standard-form-writing-converting": {
+    "id": "y-ybXWmmSs8",
+    "title": "1st Class Maths — Standard Form",
+    "sourceTopic": "Standard Form",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.795
+  },
+  "maths:n9-standard-form-calculations": {
+    "id": "y-ybXWmmSs8",
+    "title": "1st Class Maths — Standard Form",
+    "sourceTopic": "Standard Form",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.903
+  },
+  "maths:n10-recurring-decimals-to-fractions-algebraic-method": {
+    "id": "LhfBLYQ5T7E",
+    "title": "1st Class Maths — Recurring Decimals to Fractions",
+    "sourceTopic": "Recurring Decimals to Fractions",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.86
+  },
+  "maths:n11-fractions-in-ratio-problems": {
+    "id": "tuLRNDSY-hs",
+    "title": "1st Class Maths — Relate Ratios to Fractions & Percentages",
+    "sourceTopic": "Relate Ratios to Fractions & Percentages",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.608
+  },
+  "maths:n12-percentage-of-an-amount-multipliers": {
+    "id": "7Jl1BRhXls4",
+    "title": "1st Class Maths — Percentage of an Amount",
+    "sourceTopic": "Percentage of an Amount",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.903
+  },
+  "maths:n15-error-intervals": {
+    "id": "z9t1HGRNpPA",
+    "title": "1st Class Maths — Error Intervals",
+    "sourceTopic": "Error Intervals",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:n16-upper-lower-bounds": {
+    "id": "38aztTAQJDs",
+    "title": "1st Class Maths — Upper and Lower Bounds",
+    "sourceTopic": "Upper and Lower Bounds",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:a4-expanding-triple-brackets": {
+    "id": "CaUgHGV-JdI",
+    "title": "1st Class Maths — Expanding Triple Brackets",
+    "sourceTopic": "Expanding Triple Brackets",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:a4-simplifying-algebraic-fractions": {
+    "id": "2pKrSEVk-Uk",
+    "title": "1st Class Maths — Algebraic Fractions (Simplifying)",
+    "sourceTopic": "Algebraic Fractions (Simplifying)",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1
+  },
+  "maths:a6-algebraic-proof": {
+    "id": "Ghzp37tHyxA",
+    "title": "1st Class Maths — Algebraic Proof",
+    "sourceTopic": "Algebraic Proof",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:a7-function-notation-f-x": {
+    "id": "ZRQJGecu1fs",
+    "title": "1st Class Maths — Function Notation",
+    "sourceTopic": "Function Notation",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:a7-composite-functions": {
+    "id": "lSRehCwoxs8",
+    "title": "1st Class Maths — Composite Functions",
+    "sourceTopic": "Composite Functions",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:a7-inverse-functions": {
+    "id": "1aBkyMVvlsU",
+    "title": "1st Class Maths — Inverse Functions",
+    "sourceTopic": "Inverse Functions",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:a9-drawing-straight-line-graphs-table-of-values": {
+    "id": "rdIO7y4VmEE",
+    "title": "1st Class Maths — Drawing Straight Line Graphs",
+    "sourceTopic": "Drawing Straight Line Graphs",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.903
+  },
+  "maths:a9-y-mx-c": {
+    "id": "yab-t1qbsQ8",
+    "title": "1st Class Maths — Equation of a line (y = mx + c)",
+    "sourceTopic": "Equation of a line (y = mx + c)",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.887
+  },
+  "maths:a9-parallel-lines": {
+    "id": "cMevvdGsrtA",
+    "title": "1st Class Maths — Equations of Parallel Lines",
+    "sourceTopic": "Equations of Parallel Lines",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.003
+  },
+  "maths:a9-perpendicular-lines": {
+    "id": "KZG5ByowCrA",
+    "title": "1st Class Maths — Equations of Perpendicular Lines",
+    "sourceTopic": "Equations of Perpendicular Lines",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.003
+  },
+  "maths:a11-drawing-quadratic-graphs": {
+    "id": "qveAZLu2xFA",
+    "title": "1st Class Maths — Quadratic Graphs",
+    "sourceTopic": "Quadratic Graphs",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.903
+  },
+  "maths:a11-turning-points-by-completing-the-square": {
+    "id": "XjqQOn3lbx0",
+    "title": "1st Class Maths — Find a Turning Point by completing the square",
+    "sourceTopic": "Find a Turning Point by completing the square",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.05
+  },
+  "maths:a13-graph-transformations-translations": {
+    "id": "ctVr9NpSiL4",
+    "title": "1st Class Maths — Transformations of Graphs",
+    "sourceTopic": "Transformations of Graphs",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.783
+  },
+  "maths:a13-graph-transformations-reflections": {
+    "id": "ctVr9NpSiL4",
+    "title": "1st Class Maths — Transformations of Graphs",
+    "sourceTopic": "Transformations of Graphs",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.783
+  },
+  "maths:a15-velocity-time-graphs": {
+    "id": "UsmhVCjfzYQ",
+    "title": "1st Class Maths — Speed Time Graphs",
+    "sourceTopic": "Speed Time Graphs",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.667
+  },
+  "maths:a16-equation-of-a-circle-centre-origin": {
+    "id": "12NqSRpfTR4",
+    "title": "1st Class Maths — Equation of a Circle",
+    "sourceTopic": "Equation of a Circle",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.795
+  },
+  "maths:a16-equation-of-a-tangent-to-a-circle": {
+    "id": "NGnLced4bZY",
+    "title": "1st Class Maths — Equation of a Tangent to a Circle",
+    "sourceTopic": "Equation of a Tangent to a Circle",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:a17-solving-linear-equations": {
+    "id": "yGZ0oR3kA1o",
+    "title": "1st Class Maths — Linear Equations (2 step and Brackets)",
+    "sourceTopic": "Linear Equations (2 step and Brackets)",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1
+  },
+  "maths:a17-equations-with-unknowns-on-both-sides": {
+    "id": "mYsHbiOEYAc",
+    "title": "1st Class Maths — Equations (Unknowns on both sides)",
+    "sourceTopic": "Equations (Unknowns on both sides)",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:a17-equations-with-brackets-fractions": {
+    "id": "hLN-gqadwpY",
+    "title": "1st Class Maths — Linear Equations (with fractions)",
+    "sourceTopic": "Linear Equations (with fractions)",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1
+  },
+  "maths:a18-the-quadratic-formula": {
+    "id": "522V7v8Y1fQ",
+    "title": "1st Class Maths — The Quadratic Formula",
+    "sourceTopic": "The Quadratic Formula",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:a18-completing-the-square": {
+    "id": "a7WJRrRuSTc",
+    "title": "1st Class Maths — Completing the Square",
+    "sourceTopic": "Completing the Square",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:a18-solving-quadratics-by-completing-the-square": {
+    "id": "abBgTO8eW-c",
+    "title": "1st Class Maths — Solving Quadratics By Completing the Square",
+    "sourceTopic": "Solving Quadratics By Completing the Square",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:a19-simultaneous-equations-linear": {
+    "id": "kVhABlRQOGc",
+    "title": "1st Class Maths — Simultaneous Equations",
+    "sourceTopic": "Simultaneous Equations",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1
+  },
+  "maths:a19-simultaneous-equations-graphically": {
+    "id": "kVhABlRQOGc",
+    "title": "1st Class Maths — Simultaneous Equations",
+    "sourceTopic": "Simultaneous Equations",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.903
+  },
+  "maths:a19-simultaneous-equations-linear-quadratic": {
+    "id": "eEYreNDTvKQ",
+    "title": "1st Class Maths — Non-linear Simultaneous Equations",
+    "sourceTopic": "Non-linear Simultaneous Equations",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1
+  },
+  "maths:a20-iteration": {
+    "id": "WHZ2IiKcqeU",
+    "title": "1st Class Maths — Iteration",
+    "sourceTopic": "Iteration",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:a22-solving-linear-inequalities": {
+    "id": "saASveF7jlY",
+    "title": "1st Class Maths — Solving Inequalities",
+    "sourceTopic": "Solving Inequalities",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.783
+  },
+  "maths:a22-quadratic-inequalities": {
+    "id": "BlhUiV10ZCQ",
+    "title": "1st Class Maths — Quadratic Inequalities",
+    "sourceTopic": "Quadratic Inequalities",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:a22-inequalities-on-graphs-shading-regions": {
+    "id": "ChrX2MNLQX8",
+    "title": "1st Class Maths — Inequalities and Regions",
+    "sourceTopic": "Inequalities and Regions",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.675
+  },
+  "maths:a23-term-to-term-position-to-term-rules": {
+    "id": "pLC_GqWxU2s",
+    "title": "1st Class Maths — Sequences - Term to term Rule",
+    "sourceTopic": "Sequences - Term to term Rule",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.667
+  },
+  "maths:a25-nth-term-of-linear-sequences": {
+    "id": "0vOwE2NHAEk",
+    "title": "1st Class Maths — Sequences - nth term",
+    "sourceTopic": "Sequences - nth term",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.838
+  },
+  "maths:a25-is-a-number-in-the-sequence-using-the-nth-term": {
+    "id": "0vOwE2NHAEk",
+    "title": "1st Class Maths — Sequences - nth term",
+    "sourceTopic": "Sequences - nth term",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.86
+  },
+  "maths:a25-nth-term-of-quadratic-sequences": {
+    "id": "7Isa4P8lISc",
+    "title": "1st Class Maths — Sequences - Quadratic nth term",
+    "sourceTopic": "Sequences - Quadratic nth term",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1
+  },
+  "maths:r8-ratio-fractions-combining-ratios": {
+    "id": "tuLRNDSY-hs",
+    "title": "1st Class Maths — Relate Ratios to Fractions & Percentages",
+    "sourceTopic": "Relate Ratios to Fractions & Percentages",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.608
+  },
+  "maths:r9-percentage-change": {
+    "id": "Kh-euMm_6Is",
+    "title": "1st Class Maths — Percentage Change",
+    "sourceTopic": "Percentage Change",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:r9-reverse-percentages": {
+    "id": "MzDpBzXqZU8",
+    "title": "1st Class Maths — Reverse Percentages",
+    "sourceTopic": "Reverse Percentages",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:r16-compound-interest-depreciation": {
+    "id": "JxzhTD50dQg",
+    "title": "1st Class Maths — Compound Interest",
+    "sourceTopic": "Compound Interest",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.903
+  },
+  "maths:r16-repeated-percentage-change-growth-decay": {
+    "id": "Kh-euMm_6Is",
+    "title": "1st Class Maths — Percentage Change",
+    "sourceTopic": "Percentage Change",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.73
+  },
+  "maths:g3-angle-facts-points-lines-triangles": {
+    "id": "wPs1lVtd3Nw",
+    "title": "1st Class Maths — Angle Facts",
+    "sourceTopic": "Angle Facts",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.73
+  },
+  "maths:g3-interior-exterior-angles-of-polygons": {
+    "id": "FZw0XTHA2Eo",
+    "title": "1st Class Maths — Angles in Polygons",
+    "sourceTopic": "Angles in Polygons",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.795
+  },
+  "maths:g2-constructions-perpendicular-bisector": {
+    "id": "3viWgGJmkFo",
+    "title": "1st Class Maths — Constructions",
+    "sourceTopic": "Constructions",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.687
+  },
+  "maths:g2-constructions-angle-bisector-perpendicular-from-a-point": {
+    "id": "3viWgGJmkFo",
+    "title": "1st Class Maths — Constructions",
+    "sourceTopic": "Constructions",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.6
+  },
+  "maths:g2-loci": {
+    "id": "hyC-dmLk3JA",
+    "title": "1st Class Maths — Loci",
+    "sourceTopic": "Loci",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:g7-translations": {
+    "id": "iSzIrrydyLM",
+    "title": "1st Class Maths — Translations",
+    "sourceTopic": "Translations",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:g7-reflections": {
+    "id": "3RlioQo8qwE",
+    "title": "1st Class Maths — Reflections",
+    "sourceTopic": "Reflections",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:g7-rotations": {
+    "id": "gKdTYgrk_8U",
+    "title": "1st Class Maths — Rotations",
+    "sourceTopic": "Rotations",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:g7-enlargements-positive-fractional-scale-factors": {
+    "id": "z8NUrhU2e6M",
+    "title": "1st Class Maths — Enlargements",
+    "sourceTopic": "Enlargements",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1
+  },
+  "maths:g7-enlargements-with-negative-scale-factors": {
+    "id": "0_hclyERGAw",
+    "title": "1st Class Maths — Enlargements (Negative Scale Factor)",
+    "sourceTopic": "Enlargements (Negative Scale Factor)",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:g10-circle-theorems-angles-at-centre-semicircle-same-segment": {
+    "id": "dBIlCD_JF9Q",
+    "title": "1st Class Maths — Circle Theorems",
+    "sourceTopic": "Circle Theorems",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.632
+  },
+  "maths:g10-circle-theorems-tangents-cyclic-quadrilaterals-alternate-segment": {
+    "id": "dBIlCD_JF9Q",
+    "title": "1st Class Maths — Circle Theorems",
+    "sourceTopic": "Circle Theorems",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.656
+  },
+  "maths:g10-proving-circle-theorems": {
+    "id": "CmprPWcLtlk",
+    "title": "1st Class Maths — Circle Theorems Proofs",
+    "sourceTopic": "Circle Theorems Proofs",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1
+  },
+  "maths:g15-bearings": {
+    "id": "GdKgyXYlNO8",
+    "title": "1st Class Maths — Bearings",
+    "sourceTopic": "Bearings",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:g16-area-of-compound-shapes": {
+    "id": "gXnsjZQFusQ",
+    "title": "1st Class Maths — Compound Shapes",
+    "sourceTopic": "Compound Shapes",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.903
+  },
+  "maths:g16-surface-area-of-prisms": {
+    "id": "0FPCoUiJDGE",
+    "title": "1st Class Maths — Volume and Surface Area of Prisms",
+    "sourceTopic": "Volume and Surface Area of Prisms",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.032
+  },
+  "maths:g16-volume-surface-area-of-cylinders": {
+    "id": "WJ9EIMcfOhM",
+    "title": "1st Class Maths — Volume and Surface Area of Cylinders",
+    "sourceTopic": "Volume and Surface Area of Cylinders",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:g17-circumference-area-of-circles": {
+    "id": "d3qMfo5EBcU",
+    "title": "1st Class Maths — Area and Circumference",
+    "sourceTopic": "Area and Circumference",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.783
+  },
+  "maths:g18-arc-length-sector-area": {
+    "id": "Pyegtuzo5OU",
+    "title": "1st Class Maths — Sectors (Area/Arc Length)",
+    "sourceTopic": "Sectors (Area/Arc Length)",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1
+  },
+  "maths:g19-similar-shapes-lengths": {
+    "id": "PUDk7UL6u2I",
+    "title": "1st Class Maths — Similar Shapes",
+    "sourceTopic": "Similar Shapes",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.903
+  },
+  "maths:g19-similar-shapes-areas-volumes": {
+    "id": "0U1T_f5xb98",
+    "title": "1st Class Maths — Similar Areas/Volumes",
+    "sourceTopic": "Similar Areas/Volumes",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.838
+  },
+  "maths:g20-3d-pythagoras-trigonometry": {
+    "id": "99CL-tNyNR0",
+    "title": "1st Class Maths — 3D Trig and Pythagoras",
+    "sourceTopic": "3D Trig and Pythagoras",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1
+  },
+  "maths:g21-exact-trig-values-0-30-45-60-90": {
+    "id": "WaXSOuFOFsE",
+    "title": "1st Class Maths — Exact Trig Values",
+    "sourceTopic": "Exact Trig Values",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.749
+  },
+  "maths:g22-sine-rule-sides-angles": {
+    "id": "7xeLeDulY60",
+    "title": "1st Class Maths — Sine Rule",
+    "sourceTopic": "Sine Rule",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.795
+  },
+  "maths:g22-cosine-rule-sides-angles": {
+    "id": "pfjSlf0yKQY",
+    "title": "1st Class Maths — Cosine Rule",
+    "sourceTopic": "Cosine Rule",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.795
+  },
+  "maths:p6-venn-diagrams": {
+    "id": "yviq6giZ-nc",
+    "title": "1st Class Maths — Venn Diagrams",
+    "sourceTopic": "Venn Diagrams",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:p9-conditional-probability-venn-diagrams-two-way-tables": {
+    "id": "nIeMiayWVvw",
+    "title": "1st Class Maths — Conditional Probability",
+    "sourceTopic": "Conditional Probability",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.656
+  },
+  "maths:p9-conditional-probability-tree-diagrams": {
+    "id": "nIeMiayWVvw",
+    "title": "1st Class Maths — Conditional Probability",
+    "sourceTopic": "Conditional Probability",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1
+  },
+  "maths:s2-pie-charts": {
+    "id": "t4aAOzSNabI",
+    "title": "1st Class Maths — Drawing Pie Charts",
+    "sourceTopic": "Drawing Pie Charts",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.003
+  },
+  "maths:s3-cumulative-frequency-graphs": {
+    "id": "PzBE82c1dfY",
+    "title": "1st Class Maths — Cumulative Frequency Diagrams",
+    "sourceTopic": "Cumulative Frequency Diagrams",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.667
+  },
+  "maths:s4-mean-median-mode-range": {
+    "id": "MgwdxJzAqYo",
+    "title": "1st Class Maths — Averages and the Range",
+    "sourceTopic": "Averages and the Range",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 0.675
+  },
+  "maths:s4-averages-from-frequency-tables": {
+    "id": "1k3_cFj4uGY",
+    "title": "1st Class Maths — Averages from Frequency Tables",
+    "sourceTopic": "Averages from Frequency Tables",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.12
+  },
+  "maths:s4-box-plots": {
+    "id": "SUP-mBn2B2E",
+    "title": "1st Class Maths — Box Plots and Quartiles",
+    "sourceTopic": "Box Plots and Quartiles",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1.003
+  },
+  "maths:a4-adding-subtracting-multiplying-dividing-algebraic-fractions": {
+    "id": "YtHMjuB9f_g",
+    "title": "1st Class Maths — Algebraic Fractions (Operations)",
+    "sourceTopic": "Algebraic Fractions (Operations)",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1
+  },
+  "maths:a12-trig-graphs-y-sin-x-cos-x-tan-x": {
+    "id": "fNH5EWWtf7k",
+    "title": "1st Class Maths — Trigonometric Graphs",
+    "sourceTopic": "Trigonometric Graphs",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1
+  },
+  "maths:a22-inequalities-on-a-number-line": {
+    "id": "TbvD-tkn6UI",
+    "title": "1st Class Maths — Inequality Diagrams",
+    "sourceTopic": "Inequality Diagrams",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1
+  },
+  "maths:g23-area-of-a-triangle-ab-sin-c": {
+    "id": "eUJdseG2j40",
+    "title": "1st Class Maths — Area of a Triangle (Using Trig)",
+    "sourceTopic": "Area of a Triangle (Using Trig)",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1
+  },
+  "maths:n4-prime-factor-decomposition-product-of-primes": {
+    "id": "KY1LlKcIVvw",
+    "title": "1st Class Maths — Prime Factorisation",
+    "sourceTopic": "Prime Factorisation",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1
+  },
+  "maths:n8-rationalising-the-denominator": {
+    "id": "t1Pg0Ar52-k",
+    "title": "1st Class Maths — Rationalise the Denominator",
+    "sourceTopic": "Rationalise the Denominator",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1
+  },
+  "maths:r10-direct-inverse-proportion-problems": {
+    "id": "AWH6wQBbpo0",
+    "title": "1st Class Maths — Proportionality (Direct/Inverse)",
+    "sourceTopic": "Proportionality (Direct/Inverse)",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1
+  },
+  "maths:r4-ratio-notation-simplifying-ratios": {
+    "id": "pSKJMIJct_I",
+    "title": "1st Class Maths — Write and Simplify Ratios",
+    "sourceTopic": "Write and Simplify Ratios",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1
+  },
+  "maths:r5-sharing-in-a-ratio": {
+    "id": "ejhYX2cku7o",
+    "title": "1st Class Maths — Working with Ratio",
+    "sourceTopic": "Working with Ratio",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1
+  },
+  "maths:r9-percentage-increase-decrease": {
+    "id": "UULJ9_7peZU",
+    "title": "1st Class Maths — Increasing/Decreasing by a Percentage",
+    "sourceTopic": "Increasing/Decreasing by a Percentage",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1
+  },
+  "maths:s3-histograms-frequency-density-unequal-widths": {
+    "id": "g7Jnrf0g2tQ",
+    "title": "1st Class Maths — Drawing Histograms",
+    "sourceTopic": "Drawing Histograms",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1
+  },
+  "maths:g20-sohcahtoa-missing-sides": {
+    "id": "lRDHqGqRNwg",
+    "title": "1st Class Maths — Trigonometry - SOHCAHTOA",
+    "sourceTopic": "Trigonometry - SOHCAHTOA",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1
+  },
+  "maths:g20-sohcahtoa-missing-angles": {
+    "id": "lRDHqGqRNwg",
+    "title": "1st Class Maths — Trigonometry - SOHCAHTOA",
+    "sourceTopic": "Trigonometry - SOHCAHTOA",
+    "sourceUrl": "https://www.1stclassmaths.com/aqarevision",
+    "score": 1
+  }
+}

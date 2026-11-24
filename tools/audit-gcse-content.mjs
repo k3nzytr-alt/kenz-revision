@@ -5,6 +5,7 @@ const root=new URL('../',import.meta.url);
 const html=fs.readFileSync(new URL('index.html',root),'utf8');
 const courseSource=html.slice(html.indexOf('const SP_ROOT'),html.indexOf('const MG='));
 const courses=new Function(courseSource+';return COURSES;')();
+const firstClass=JSON.parse(fs.readFileSync(new URL('tools/first-class-maths-map.json',root),'utf8'));
 const context={};
 vm.runInNewContext(fs.readFileSync(new URL('video-map.js',root),'utf8')+';this.ids=VIDEO_IDS;this.titles=VIDEO_TITLES',context);
 
@@ -45,8 +46,14 @@ for(const id of topicIds){
   if(wrongLevel.test(context.titles[id]||''))failures.push(`Wrong-level video: ${id} -> ${context.titles[id]}`);
 }
 for(const id of Object.keys(context.ids))if(!topicIds.includes(id))failures.push(`Video mapping has no syllabus topic: ${id}`);
+if(Object.keys(firstClass).length<90)failures.push(`Expected at least 90 1st Class Maths mappings, found ${Object.keys(firstClass).length}`);
+for(const [id,video] of Object.entries(firstClass)){
+  if(!id.startsWith('maths:')||!topicIds.includes(id))failures.push(`1st Class Maths mapping has no Maths syllabus topic: ${id}`);
+  if(!/^[A-Za-z0-9_-]{11}$/.test(video.id||''))failures.push(`Invalid 1st Class Maths YouTube ID: ${id}`);
+  if(context.ids[id]!==video.id)failures.push(`1st Class Maths mapping was not applied: ${id}`);
+}
 
-const summary={courses:Object.fromEntries(courses.map(course=>[course.id,course.units.reduce((n,unit)=>n+unit.topics.length,0)])),topics:topicIds.length,videos:Object.keys(context.ids).length,wrongLevelVideos:topicIds.filter(id=>wrongLevel.test(context.titles[id]||'')).length};
+const summary={courses:Object.fromEntries(courses.map(course=>[course.id,course.units.reduce((n,unit)=>n+unit.topics.length,0)])),topics:topicIds.length,videos:Object.keys(context.ids).length,firstClassMathsVideos:Object.keys(firstClass).length,wrongLevelVideos:topicIds.filter(id=>wrongLevel.test(context.titles[id]||'')).length};
 console.log(JSON.stringify(summary,null,2));
 if(failures.length){console.error(failures.join('\n'));process.exit(1)}
 console.log('GCSE content audit passed.');
